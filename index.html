@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SID VISUALS | Professional Video Editor</title>
+<meta name="description" content="SIDDHARTH – Professional Video Editor specializing in YouTube, Commercials, Reels, Wedding Films, Corporate Videos, Motion Graphics, and Social Media Content.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Pointer Light -->
+<div id="pointer-light"></div>
+
+<!-- BG Canvas (editing-themed) -->
+<canvas id="bg-canvas"></canvas>
+
+<!-- Film Grain -->
+<div class="film-grain"></div>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">✕</button>
+  <a href="#home" onclick="closeMobile()">Home</a>
+  <a href="#projects" onclick="closeMobile()">Projects</a>
+  <a href="#services" onclick="closeMobile()">Services</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#portfolio" onclick="closeMobile()">Portfolio</a>
+  <a href="#reviews" onclick="closeMobile()">Reviews</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar" id="navbar">
+  <a href="#home" class="nav-logo">
+    <div class="logo-mark">▶</div>
+    SID VISUALS
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Hire Me</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+</nav>
+
+<!-- ===== HERO TICKER ===== -->
+<!-- inserted below hero -->
+
+<!-- ===== HERO ===== -->
+<section id="home" class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="pulse-dot"></span>
+      Available for new projects · SIDDHARTH
+    </div>
+    <h1 class="hero-title">
+      <div class="line"><span>Turning Raw</span></div>
+      <div class="line"><span><span class="grad-blue">Footage</span> into</span></div>
+      <div class="line"><span><span class="grad-purple">Cinematic</span> Stories.</span></div>
+    </h1>
+    <p class="hero-sub">Professional Video Editor specializing in YouTube, Commercials, Reels, Wedding Films, Corporate Videos, Motion Graphics, and Social Media Content. Every frame tells your story.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn-p">▶ &nbsp;View My Work</a>
+      <a href="#contact" class="btn-s">Contact Me &nbsp;→</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-icon">✦</div><div class="hstat-label">100+ Projects Done</div></div>
+      <div class="hstat"><div class="hstat-icon">⚡</div><div class="hstat-label">Fast Delivery</div></div>
+      <div class="hstat"><div class="hstat-icon">🎬</div><div class="hstat-label">Pro Quality</div></div>
+      <div class="hstat"><div class="hstat-icon">★</div><div class="hstat-label">Client Satisfaction</div></div>
+    </div>
+  </div>
+  <div class="hero-visual" aria-hidden="true">
+    <div class="editor-win">
+      <div class="e-bar">
+        <div class="tl r"></div><div class="tl y"></div><div class="tl g"></div>
+        <span class="e-title">Adobe Premiere Pro — SidVisuals_Cinematic_v4.prproj</span>
+      </div>
+      <div class="e-preview"><div class="e-preview-label">PREVIEW · 1920×1080 · 24fps</div></div>
+      <div class="e-playhead-wrap"><div class="e-playhead" id="playhead"></div></div>
+      <div class="e-timeline">
+        <div class="e-row"><span class="e-lbl">V3</span><div class="e-clips"><div class="clip b" style="left:4%;width:28%">Title Card</div><div class="clip p" style="left:38%;width:44%">B-Roll 03</div></div></div>
+        <div class="e-row"><span class="e-lbl">V2</span><div class="e-clips"><div class="clip p" style="left:0;width:52%">Hero Shot</div><div class="clip b" style="left:56%;width:38%">Interview</div></div></div>
+        <div class="e-row"><span class="e-lbl">V1</span><div class="e-clips"><div class="clip b" style="left:0;width:100%">Main Footage</div></div></div>
+        <div class="e-row"><span class="e-lbl">A1</span><div class="e-clips" id="wf-clips"></div></div>
+        <div class="e-row"><span class="e-lbl">A2</span><div class="e-clips"><div class="clip c" style="left:0;width:100%">Background Music</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER after hero -->
+<div class="ticker-wrap" style="z-index:4;position:relative;">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ===== ABOUT ===== -->
+<section id="about" class="sec">
+  <div class="ctr">
+    <div class="content-bg">
+      <div class="about-grid">
+        <div class="rev">
+          <div class="photo-wrap">
+            <div class="photo-glow"></div>
+            <div class="photo-box">🎬</div>
+            <div class="photo-badge">
+              <div class="badge-av">SID</div>
+              <div>
+                <div class="badge-n">SIDDHARTH</div>
+                <div class="badge-s">✦ Open to new projects</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:22px;">
+          <div class="rev rd1">
+            <span class="sec-label">About Me</span>
+            <h2 class="sec-title">Crafting stories<br>one cut at a time</h2>
+          </div>
+          <div class="rev rd2">
+            <p class="about-text">I'm SIDDHARTH — a passionate video editor with a deep love for visual storytelling. With years of experience in the editing suite, I transform raw footage into captivating narratives that connect with audiences and drive results for brands and creators.</p>
+            <p class="about-text" style="margin-top:12px">My workflow blends technical precision with creative intuition — whether I'm cutting a fast-paced social reel or weaving an emotional wedding film, I approach every project as a unique story waiting to be told.</p>
+          </div>
+          <div class="about-hi rev rd3">
+            <div class="hi-item"><span class="hi-dot">◆</span> Cinematic color grading</div>
+            <div class="hi-item"><span class="hi-dot">◆</span> Precision audio design</div>
+            <div class="hi-item"><span class="hi-dot">◆</span> Motion graphics & VFX</div>
+            <div class="hi-item"><span class="hi-dot">◆</span> Fast turnaround times</div>
+            <div class="hi-item"><span class="hi-dot">◆</span> Organized file delivery</div>
+            <div class="hi-item"><span class="hi-dot">◆</span> Unlimited revisions policy</div>
+          </div>
+          <div class="stats-row rev rd4">
+            <div class="sbox"><span class="snum">100+</span><div class="sdesc">Projects</div></div>
+            <div class="sbox"><span class="snum">80+</span><div class="sdesc">Clients</div></div>
+            <div class="sbox"><span class="snum">5+</span><div class="sdesc">Years Exp.</div></div>
+            <div class="sbox"><span class="snum">100%</span><div class="sdesc">Delivery Rate</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== SERVICES ===== -->
+<section id="services" class="sec services-bg">
+  <div class="ctr">
+    <div class="content-bg rev">
+      <span class="sec-label">What I Do</span>
+      <h2 class="sec-title">Services</h2>
+      <p class="sec-sub">End-to-end post-production services tailored to your vision, platform, and audience.</p>
+    </div>
+    <div class="srv-grid">
+      <div class="srv-card rev rd1"><div class="srv-icon">▶</div><h3 class="srv-title">YouTube Editing</h3><p class="srv-desc">Engaging long and short-form content with dynamic cuts, b-roll, captions, and retention-focused pacing.</p></div>
+      <div class="srv-card rev rd2"><div class="srv-icon">💍</div><h3 class="srv-title">Wedding Films</h3><p class="srv-desc">Timeless, emotional wedding films that capture every moment with cinematic beauty and storytelling elegance.</p></div>
+      <div class="srv-card rev rd3"><div class="srv-icon">🏢</div><h3 class="srv-title">Corporate Videos</h3><p class="srv-desc">Professional brand videos, product demos, interviews, and internal communications that elevate your company image.</p></div>
+      <div class="srv-card rev rd1"><div class="srv-icon">📱</div><h3 class="srv-title">Instagram Reels</h3><p class="srv-desc">Scroll-stopping short-form content optimized for virality — trending transitions, captions, and platform-native pacing.</p></div>
+      <div class="srv-card rev rd2"><div class="srv-icon">🎨</div><h3 class="srv-title">Motion Graphics</h3><p class="srv-desc">Custom animated titles, logo reveals, lower thirds, and motion graphic sequences that add polish to any production.</p></div>
+      <div class="srv-card rev rd3"><div class="srv-icon">🎨</div><h3 class="srv-title">Color Grading</h3><p class="srv-desc">Professional color correction and cinematic grading using DaVinci Resolve — turning flat footage into stunning visuals.</p></div>
+      <div class="srv-card rev rd1"><div class="srv-icon">🔊</div><h3 class="srv-title">Audio Design</h3><p class="srv-desc">Dialogue cleanup, noise reduction, music mixing, and sound design so your video sounds as good as it looks.</p></div>
+      <div class="srv-card rev rd2"><div class="srv-icon">✂️</div><h3 class="srv-title">Transitions & FX</h3><p class="srv-desc">Custom seamless transitions, speed ramps, light leaks, and cinematic visual effects that elevate every scene.</p></div>
+      <div class="srv-card rev rd3"><div class="srv-icon">📺</div><h3 class="srv-title">Commercial Ads</h3><p class="srv-desc">High-converting ad content for brands — product videos, testimonials, and promotional cuts that drive real results.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== PROJECTS ===== -->
+<section id="projects" class="sec">
+  <div class="ctr">
+    <div class="content-bg rev">
+      <span class="sec-label">Featured Work</span>
+      <h2 class="sec-title">Projects</h2>
+      <p class="sec-sub">A selection of recent work spanning commercial, narrative, and social content.</p>
+    </div>
+    <div class="proj-grid">
+      <div class="proj-card rev rd1">
+        <div class="proj-thumb">
+          <div class="proj-tb" style="background:linear-gradient(135deg,#0f2027,#203a43,#2c5364)"></div>
+          <div class="proj-icon">🎬</div>
+          <div class="proj-overlay"><div class="play-big">▶</div></div>
+          <div class="proj-cat">Wedding</div>
+        </div>
+        <div class="proj-info">
+          <h3 class="proj-title">A Midsummer Wedding Film</h3>
+          <div class="proj-meta"><span class="proj-mi">⏱ 8:24</span><span class="proj-mi">🎨 DaVinci Resolve</span></div>
+          <p class="proj-desc">An intimate wedding film captured across two days in the hills of Tuscany, combining cinema vérité and styled scenes.</p>
+          <div class="proj-btns"><a href="#" class="pb pp">▶ Watch Video</a><a href="#" class="pb pg">📁 Drive Folder</a></div>
+        </div>
+      </div>
+      <div class="proj-card rev rd2">
+        <div class="proj-thumb">
+          <div class="proj-tb" style="background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)"></div>
+          <div class="proj-icon">🏢</div>
+          <div class="proj-overlay"><div class="play-big">▶</div></div>
+          <div class="proj-cat">Corporate</div>
+        </div>
+        <div class="proj-info">
+          <h3 class="proj-title">Nexus Brand Story</h3>
+          <div class="proj-meta"><span class="proj-mi">⏱ 3:10</span><span class="proj-mi">🎨 Premiere Pro</span></div>
+          <p class="proj-desc">A cinematic brand documentary for a tech startup — executive interviews, office lifestyle, and product sequences.</p>
+          <div class="proj-btns"><a href="#" class="pb pp">▶ Watch Video</a><a href="#" class="pb pg">📁 Drive Folder</a></div>
+        </div>
+      </div>
+      <div class="proj-card rev rd3">
+        <div class="proj-thumb">
+          <div class="proj-tb" style="background:linear-gradient(135deg,#200122,#6f0000,#200122)"></div>
+          <div class="proj-icon">📱</div>
+          <div class="proj-overlay"><div class="play-big">▶</div></div>
+          <div class="proj-cat">Social</div>
+        </div>
+        <div class="proj-info">
+          <h3 class="proj-title">90s Aesthetic Reel</h3>
+          <div class="proj-meta"><span class="proj-mi">⏱ 0:30</span><span class="proj-mi">🎨 After Effects</span></div>
+          <p class="proj-desc">A viral short-form reel for a lifestyle brand — retro transitions, VHS textures, and fast-cut rhythm tied to the beat.</p>
+          <div class="proj-btns"><a href="#" class="pb pp">▶ Watch Video</a><a href="#" class="pb pg">📁 Drive Folder</a></div>
+        </div>
+      </div>
+      <div class="proj-card rev rd1">
+        <div class="proj-thumb">
+          <div class="proj-tb" style="background:linear-gradient(135deg,#0a3d0a,#145214,#0d6b0d)"></div>
+          <div class="proj-icon">✈️</div>
+          <div class="proj-overlay"><div class="play-big">▶</div></div>
+          <div class="proj-cat">Travel</div>
+        </div>
+        <div class="proj-info">
+          <h3 class="proj-title">Japan in 4 Seasons</h3>
+          <div class="proj-meta"><span class="proj-mi">⏱ 12:40</span><span class="proj-mi">🎨 DaVinci Resolve</span></div>
+          <p class="proj-desc">A travel documentary with carefully graded 4K aerial footage, ambient soundscape, and poetic narration.</p>
+          <div class="proj-btns"><a href="#" class="pb pp">▶ Watch Video</a><a href="#" class="pb pg">📁 Drive Folder</a></div>
+        </div>
+      </div>
+      <div class="proj-card rev rd2">
+        <div class="proj-thumb">
+          <div class="proj-tb" style="background:linear-gradient(135deg,#2d1b69,#5b21b6,#7c3aed)"></div>
+          <div class="proj-icon">🎵</div>
+          <div class="proj-overlay"><div class="play-big">▶</div></div>
+          <div class="proj-cat">Music</div>
+        </div>
+        <div class="proj-info">
+          <h3 class="proj-title">Echoes — Music Video</h3>
+          <div class="proj-meta"><span class="proj-mi">⏱ 4:20</span><span class="proj-mi">🎨 After Effects</span></div>
+          <p class="proj-desc">A narrative music video blending performance footage with surreal visual effects, split-screen sequences, and glitch art.</p>
+          <div class="proj-btns"><a href="#" class="pb pp">▶ Watch Video</a><a href="#" class="pb pg">📁 Drive Folder</a></div>
+        </div>
+      </div>
+      <div class="proj-card rev rd3">
+        <div class="proj-thumb">
+          <div class="proj-tb" style="background:linear-gradient(135deg,#0f0c29,#302b63,#24243e)"></div>
+          <div class="proj-icon">📺</div>
+          <div class="proj-overlay"><div class="play-big">▶</div></div>
+          <div class="proj-cat">Commercial</div>
+        </div>
+        <div class="proj-info">
+          <h3 class="proj-title">Lumière — Product Reveal</h3>
+          <div class="proj-meta"><span class="proj-mi">⏱ 0:60</span><span class="proj-mi">🎨 Premiere + AE</span></div>
+          <p class="proj-desc">A luxury product commercial for a skincare brand — studio lighting, macro shots, kinetic typography, and rich motion design.</p>
+          <div class="proj-btns"><a href="#" class="pb pp">▶ Watch Video</a><a href="#" class="pb pg">📁 Drive Folder</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== PORTFOLIO GALLERY ===== -->
+<section id="portfolio" class="sec gallery-bg">
+  <div class="ctr">
+    <div class="content-bg rev">
+      <span class="sec-label">Gallery</span>
+      <h2 class="sec-title">Portfolio</h2>
+      <p class="sec-sub">Browse work across categories — hover to preview each piece.</p>
+    </div>
+    <div class="filter-tabs rev" id="filterTabs"></div>
+    <div class="masonry" id="galleryGrid"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== DRIVE ===== -->
+<section class="sec">
+  <div class="ctr">
+    <div class="content-bg rev" style="text-align:center;max-width:640px;margin:0 auto 60px;">
+      <span class="sec-label">Complete Portfolio</span>
+      <h2 class="sec-title">Explore My<br><span class="grad-blue">Complete Work</span></h2>
+      <p class="sec-sub" style="margin:0 auto">Browse organized folders of every project — full cuts, rough edits, and deliverables.</p>
+    </div>
+    <div class="drive-grid rev">
+      <div class="drv-folder"><div class="drv-icon"></div><div class="drv-name">Wedding Projects</div><div class="drv-count">34 films · 2019–2024</div></div>
+      <div class="drv-folder"><div class="drv-icon" style="background:linear-gradient(135deg,var(--cyan),var(--blue))"></div><div class="drv-name">Corporate Videos</div><div class="drv-count">22 projects · Various clients</div></div>
+      <div class="drv-folder"><div class="drv-icon" style="background:linear-gradient(135deg,var(--purple),#ec4899)"></div><div class="drv-name">Commercial Ads</div><div class="drv-count">18 spots · Brands & startups</div></div>
+      <div class="drv-folder"><div class="drv-icon" style="background:linear-gradient(135deg,#ef4444,#f97316)"></div><div class="drv-name">YouTube Channels</div><div class="drv-count">100+ episodes · Multiple channels</div></div>
+      <div class="drv-folder"><div class="drv-icon" style="background:linear-gradient(135deg,#f59e0b,#ef4444)"></div><div class="drv-name">Instagram & Reels</div><div class="drv-count">200+ short clips</div></div>
+      <div class="drv-folder"><div class="drv-icon" style="background:linear-gradient(135deg,#10b981,var(--cyan))"></div><div class="drv-name">Motion Graphics</div><div class="drv-count">Titles, intros, animations</div></div>
+    </div>
+    <div style="text-align:center;margin-top:40px;" class="rev">
+      <a href="#" class="btn-p" style="display:inline-flex;gap:12px">📁 &nbsp;Open Google Drive Portfolio</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== SKILLS ===== -->
+<section class="sec services-bg">
+  <div class="ctr">
+    <div class="content-bg rev">
+      <span class="sec-label">Technical Skills</span>
+      <h2 class="sec-title">Software Mastery</h2>
+      <p class="sec-sub">Years of professional experience across the industry's leading tools.</p>
+    </div>
+    <div class="skills-grid">
+      <div class="sk-card rev rd1"><div class="sk-ring"><svg viewBox="0 0 86 86"><circle class="sk-bg" cx="43" cy="43" r="36"/><circle class="sk-fill" cx="43" cy="43" r="36" stroke="#3B82F6" stroke-dasharray="226" stroke-dashoffset="226" data-offset="7"/></svg><div class="sk-pct" style="color:var(--blue-b)">97%</div></div><div class="sk-name">Adobe Premiere Pro</div><div class="sk-cat">Video Editing</div></div>
+      <div class="sk-card rev rd2"><div class="sk-ring"><svg viewBox="0 0 86 86"><circle class="sk-bg" cx="43" cy="43" r="36"/><circle class="sk-fill" cx="43" cy="43" r="36" stroke="#8B5CF6" stroke-dasharray="226" stroke-dashoffset="226" data-offset="34"/></svg><div class="sk-pct" style="color:var(--purple-b)">85%</div></div><div class="sk-name">After Effects</div><div class="sk-cat">Motion Graphics</div></div>
+      <div class="sk-card rev rd3"><div class="sk-ring"><svg viewBox="0 0 86 86"><circle class="sk-bg" cx="43" cy="43" r="36"/><circle class="sk-fill" cx="43" cy="43" r="36" stroke="#06B6D4" stroke-dasharray="226" stroke-dashoffset="226" data-offset="27"/></svg><div class="sk-pct" style="color:var(--cyan)">88%</div></div><div class="sk-name">DaVinci Resolve</div><div class="sk-cat">Color Grading</div></div>
+      <div class="sk-card rev rd4"><div class="sk-ring"><svg viewBox="0 0 86 86"><circle class="sk-bg" cx="43" cy="43" r="36"/><circle class="sk-fill" cx="43" cy="43" r="36" stroke="#3B82F6" stroke-dasharray="226" stroke-dashoffset="226" data-offset="45"/></svg><div class="sk-pct" style="color:var(--blue-b)">80%</div></div><div class="sk-name">Photoshop</div><div class="sk-cat">Compositing</div></div>
+      <div class="sk-card rev rd1"><div class="sk-ring"><svg viewBox="0 0 86 86"><circle class="sk-bg" cx="43" cy="43" r="36"/><circle class="sk-fill" cx="43" cy="43" r="36" stroke="#06B6D4" stroke-dasharray="226" stroke-dashoffset="226" data-offset="25"/></svg><div class="sk-pct" style="color:var(--cyan)">89%</div></div><div class="sk-name">CapCut</div><div class="sk-cat">Short-form</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== WORKFLOW ===== -->
+<section class="sec">
+  <div class="ctr">
+    <div class="content-bg rev" style="text-align:center;max-width:640px;margin:0 auto">
+      <span class="sec-label">My Process</span>
+      <h2 class="sec-title">How I Work</h2>
+      <p class="sec-sub" style="margin:0 auto">A clear, collaborative workflow designed for smooth delivery and great results.</p>
+    </div>
+    <div class="workflow-wrap rev">
+      <div class="wf-step"><div class="wf-num">01</div><div class="wf-dot">📥</div><div class="wf-title">Receive Project</div><div class="wf-desc">You share footage, brief, and references via Drive or WeTransfer.</div></div>
+      <div class="wf-step"><div class="wf-num">02</div><div class="wf-dot">🧠</div><div class="wf-title">Understand Vision</div><div class="wf-desc">I study your brand, audience, and goals before making a single cut.</div></div>
+      <div class="wf-step"><div class="wf-num">03</div><div class="wf-dot">✂️</div><div class="wf-title">Editing</div><div class="wf-desc">Full edit — cuts, color, audio, graphics, transitions.</div></div>
+      <div class="wf-step"><div class="wf-num">04</div><div class="wf-dot">🔄</div><div class="wf-title">Revisions</div><div class="wf-desc">You review and give feedback. I refine until it's exactly right.</div></div>
+      <div class="wf-step"><div class="wf-num">05</div><div class="wf-dot">🚀</div><div class="wf-title">Final Delivery</div><div class="wf-desc">Export in all formats — 4K, compressed, web-optimized.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== TESTIMONIALS (empty for now) ===== -->
+<section id="testimonials" class="sec services-bg">
+  <div class="ctr">
+    <div class="content-bg rev">
+      <span class="sec-label">Client Love</span>
+      <h2 class="sec-title">Testimonials</h2>
+      <p class="sec-sub">Real feedback from real clients — coming soon as reviews come in.</p>
+      <div class="testimonials-empty">
+        <div class="te-icon">💬</div>
+        <div class="te-msg">Client testimonials will appear here.</div>
+        <div class="te-sub">Be the first to work with SID VISUALS and leave your review below ↓</div>
+      </div>
+    </div>
+    <!-- Trust badges -->
+    <div class="trust-grid" style="margin-top:40px">
+      <div class="ti rev rd1"><span class="ti-icon">✦</span><span class="ti-label">Professional Communication</span></div>
+      <div class="ti rev rd2"><span class="ti-icon">⚡</span><span class="ti-label">On-Time Delivery</span></div>
+      <div class="ti rev rd3"><span class="ti-icon">🎨</span><span class="ti-label">Unlimited Creativity</span></div>
+      <div class="ti rev rd1"><span class="ti-icon">💬</span><span class="ti-label">Fast Response</span></div>
+      <div class="ti rev rd2"><span class="ti-icon">🎬</span><span class="ti-label">High Quality Exports</span></div>
+      <div class="ti rev rd3"><span class="ti-icon">📁</span><span class="ti-label">Organized Workflow</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== REVIEW SECTION ===== -->
+<section id="reviews" class="sec review-bg">
+  <div class="ctr">
+    <div class="content-bg rev" style="text-align:center;max-width:640px;margin:0 auto 0">
+      <span class="sec-label">Share Your Experience</span>
+      <h2 class="sec-title">Leave a Review</h2>
+      <p class="sec-sub" style="margin:0 auto">Worked with SID VISUALS? We'd love to hear about your experience.</p>
+    </div>
+    <div class="review-form-wrap">
+      <div class="rf-card rev rd1">
+        <h3 class="rf-title">Submit Your Review</h3>
+        <div class="rf-row">
+          <div class="rf-group">
+            <label class="rf-label">Your Name</label>
+            <input type="text" class="rf-input" placeholder="Full name">
+          </div>
+          <div class="rf-group">
+            <label class="rf-label">Company / Channel</label>
+            <input type="text" class="rf-input" placeholder="Company or channel name">
+          </div>
+        </div>
+        <div class="rf-row">
+          <div class="rf-group">
+            <label class="rf-label">Email</label>
+            <input type="email" class="rf-input" placeholder="your@email.com">
+          </div>
+          <div class="rf-group">
+            <label class="rf-label">Project Type</label>
+            <select class="rf-select rf-input">
+              <option value="">Select type</option>
+              <option>YouTube Editing</option>
+              <option>Wedding Film</option>
+              <option>Corporate Video</option>
+              <option>Instagram Reels</option>
+              <option>Commercial Ad</option>
+              <option>Motion Graphics</option>
+              <option>Color Grading</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="rf-group">
+          <label class="rf-label">Your Rating</label>
+          <div class="star-input">
+            <input type="radio" id="s5" name="rating" value="5"><label for="s5">★</label>
+            <input type="radio" id="s4" name="rating" value="4"><label for="s4">★</label>
+            <input type="radio" id="s3" name="rating" value="3"><label for="s3">★</label>
+            <input type="radio" id="s2" name="rating" value="2"><label for="s2">★</label>
+            <input type="radio" id="s1" name="rating" value="1"><label for="s1">★</label>
+          </div>
+        </div>
+        <div class="rf-group">
+          <label class="rf-label">Your Review</label>
+          <textarea class="rf-textarea" placeholder="Share your experience working with SID VISUALS — what did you love most about the edit?"></textarea>
+        </div>
+        <button class="btn-p" style="width:100%;justify-content:center;margin-top:8px" onclick="submitReview(event)">
+          Submit Review ✦
+        </button>
+        <p class="rf-note">Your review will be displayed in the Testimonials section after approval.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===== CONTACT ===== -->
+<section id="contact" class="sec">
+  <div class="ctr">
+    <div class="content-bg rev">
+      <span class="sec-label">Get in Touch</span>
+      <h2 class="sec-title">Start a Project</h2>
+      <p class="sec-sub">Ready to create something great? Let's talk about your vision.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="g-card rev rd1">
+        <form id="contactForm" class="cf-form" onsubmit="submitContact(event)">
+
+  <div class="cf-row">
+
+    <div class="cf-group">
+      <label class="cf-label">Name</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        class="cf-input"
+        placeholder="Your full name"
+        required
+      >
+    </div>
+
+    <div class="cf-group">
+      <label class="cf-label">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        class="cf-input"
+        placeholder="your@email.com"
+        required
+      >
+    </div>
+
+  </div>
+
+  <div class="cf-row">
+
+    <div class="cf-group">
+      <label class="cf-label">Phone Number</label>
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        class="cf-input"
+        placeholder="+91 9876543210"
+        required
+      >
+    </div>
+
+    <div class="cf-group">
+      <label class="cf-label">Project Type</label>
+      <select
+        id="projectType"
+        name="projectType"
+        class="cf-select cf-input"
+        required
+      >
+        <option value="">Select type</option>
+        <option value="YouTube Editing">YouTube Editing</option>
+        <option value="Wedding Film">Wedding Film</option>
+        <option value="Corporate Video">Corporate Video</option>
+        <option value="Instagram Reels">Instagram Reels</option>
+        <option value="Commercial Ad">Commercial Ad</option>
+        <option value="Motion Graphics">Motion Graphics</option>
+        <option value="Color Grading">Color Grading</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+  </div>
+
+  <div class="cf-group">
+
+    <label class="cf-label">Estimated Budget</label>
+
+    <select
+      id="budget"
+      name="budget"
+      class="cf-select cf-input"
+      required
+    >
+      <option value="">Select budget</option>
+      <option value="Under $500">Under $500</option>
+      <option value="$500-$1,000">$500 – $1,000</option>
+      <option value="$1,000-$3,000">$1,000 – $3,000</option>
+      <option value="$3,000-$5,000">$3,000 – $5,000</option>
+      <option value="$5,000+">$5,000+</option>
+    </select>
+
+  </div>
+
+  <div class="cf-group">
+
+    <label class="cf-label">Project Details</label>
+
+    <textarea
+      id="message"
+      name="message"
+      class="cf-textarea"
+      placeholder="Tell me about your project, timeline, references, and any special requirements..."
+      required
+    ></textarea>
+
+  </div>
+
+  <div style="display:flex;gap:12px">
+
+    <button
+      type="submit"
+      class="btn-p"
+      style="flex:1;justify-content:center"
+    >
+      Send Inquiry →
+    </button>
+
+    <a
+      href="#"
+      class="btn-s"
+      style="padding:14px 20px"
+    >
+      📅 Book Call
+    </a>
+
+  </div>
+
+</form>
+      </div>
+      <div class="c-info rev rd2">
+        <p class="c-intro">Whether you have a clear brief or just a rough idea, I'm here to help you figure it out. Reach out through any channel — I typically respond within a few hours.</p>
+        <div class="c-links">
+          <a href="mailto:sksiddharth641@gmail.com" class="c-link"><span class="c-link-ic">✉️</span>sksiddharth641@gmail.com</a>
+          <a href="tel:+917871742553" class="c-link"><span class="c-link-ic">📞</span>+91 78717 42553</a>
+          <a href="https://wa.me/917871742553" class="c-link" target="_blank" rel="noopener"><span class="c-link-ic">💬</span>WhatsApp — +91 78717 42553</a>
+          <a href="#" class="c-link"><span class="c-link-ic">💼</span>LinkedIn Profile</a>
+        </div>
+        <div>
+          <div class="cf-label" style="margin-bottom:14px">Also find me on</div>
+          <div class="soc-grid">
+            <a href="#" class="soc-a" aria-label="Instagram">📸</a>
+            <a href="#" class="soc-a" aria-label="Behance">🎨</a>
+            <a href="#" class="soc-a" aria-label="Fiverr">💼</a>
+            <a href="#" class="soc-a" aria-label="Upwork">🔗</a>
+            <a href="#" class="soc-a" aria-label="YouTube">▶️</a>
+            <a href="#" class="soc-a" aria-label="TikTok">🎵</a>
+            <a href="#" class="soc-a" aria-label="Vimeo">🎞️</a>
+            <a href="#" class="soc-a" aria-label="Twitter">🐦</a>
+          </div>
+        </div>
+        <div class="resp-badge">
+          <div class="rb-label">⚡ Average response time</div>
+          <div class="rb-val">Under 2 Hours</div>
+          <div class="rb-sub">During business hours</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FAB ===== -->
+<div class="fab">
+  <div class="fab-menu">
+    <a href="https://wa.me/917871742553" class="fab-item" target="_blank" rel="noopener"><span>💬</span>WhatsApp</a>
+    <a href="mailto:sksiddharth641@gmail.com" class="fab-item"><span>✉️</span>Email</a>
+    <a href="#" class="fab-item"><span>📅</span>Book a Call</a>
+  </div>
+  <button class="fab-main">💬</button>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="ctr">
+    <div class="ft-grid">
+      <div>
+        <div class="ft-logo">⬡ SID VISUALS</div>
+        <p class="ft-desc">Professional video editor turning raw footage into cinematic stories. SIDDHARTH — Based in India, working globally.</p>
+        <div class="ft-socs">
+          <a href="#" class="ft-soc">📸</a>
+          <a href="#" class="ft-soc">💼</a>
+          <a href="#" class="ft-soc">▶️</a>
+          <a href="#" class="ft-soc">🎞️</a>
+        </div>
+      </div>
+      <div>
+        <div class="ft-hd">Navigation</div>
+        <ul class="ft-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-hd">Services</div>
+        <ul class="ft-links">
+          <li><a href="#services">YouTube Editing</a></li>
+          <li><a href="#services">Wedding Films</a></li>
+          <li><a href="#services">Corporate Videos</a></li>
+          <li><a href="#services">Motion Graphics</a></li>
+          <li><a href="#services">Color Grading</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="ft-hd">Contact</div>
+        <ul class="ft-links">
+          <li><a href="mailto:sksiddharth641@gmail.com">sksiddharth641@gmail.com</a></li>
+          <li><a href="tel:+917871742553">+91 78717 42553</a></li>
+          <li><a href="https://wa.me/917871742553">WhatsApp</a></li>
+          <li><a href="#">Fiverr</a></li>
+          <li><a href="#">Upwork</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span class="ft-copy">© 2026 SID VISUALS · SIDDHARTH. All rights reserved.</span>
+      <a href="#home" class="back-top">↑ Back to Top</a>
+    </div>
+  </div>
+</footer>
+<script src="js/script.js"></script>
+</body>
+</html>
