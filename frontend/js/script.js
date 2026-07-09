@@ -285,7 +285,7 @@ galleryData.forEach((item,i)=>{
 
     try {
 
-        const response = await fetch("https://siddharth-portfolio-o283.onrender.com", {
+        const response = await fetch("https://siddharth-portfolio-o283.onrender.com/api/contact", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
