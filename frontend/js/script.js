@@ -286,19 +286,19 @@ galleryData.forEach((item,i)=>{
     try {
 
         const response = await fetch("https://siddharth-portfolio-o283.onrender.com/api/contact", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name,
-                email, 
-                phone,
-                projectType,
-                budget,
-                message
-            })
-        });
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        name,
+        email,
+        phone,
+        projectType,
+        budget,
+        message
+    })
+});
 
         const data = await response.json();
 
