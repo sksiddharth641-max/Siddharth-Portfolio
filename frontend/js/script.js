@@ -187,21 +187,24 @@ if(wfc){
 }
 
 // ========== GALLERY ==========
-const galleryData=[
-  {cat:'wedding',title:'Lake Como Wedding',emoji:'💍',h:200},
-  {cat:'youtube',title:'Tech Channel Intro',emoji:'▶',h:160},
-  {cat:'commercial',title:'Sneaker Drop Ad',emoji:'👟',h:220},
-  {cat:'instagram',title:'Coffee Brand Reel',emoji:'☕',h:180},
-  {cat:'travel',title:'Iceland Adventure',emoji:'🌋',h:240},
-  {cat:'music',title:'Indie Single MV',emoji:'🎵',h:200},
-  {cat:'corporate',title:'Startup Profile',emoji:'🏢',h:160},
-  {cat:'motion',title:'Logo Animation',emoji:'✨',h:180},
-  {cat:'wedding',title:'Bali Destination',emoji:'🌺',h:220},
-  {cat:'youtube',title:'Cooking Channel',emoji:'🍳',h:200},
-  {cat:'commercial',title:'Watch Campaign',emoji:'⌚',h:170},
-  {cat:'instagram',title:'Fashion Week Reel',emoji:'👗',h:240},
-  {cat:'travel',title:'Southeast Asia',emoji:'🏝️',h:190},
-  {cat:'music',title:'Hip-Hop MV',emoji:'🎤',h:210},
+const galleryData = [
+  { cat:'commercial', title:'Bike Edit 1', video:'videos/Bike1.mp4 (1).mp4', h:200 },
+  { cat:'commercial', title:'Bike Edit 2', video:'videos/Bike2.mp4 (1).mp4', h:200 },
+  { cat:'commercial', title:'Car Edit', video:'videos/Car Edit.mp4.mp4', h:220 },
+  { cat:'wedding', title:'Engagement Video', video:'videos/Engagement.mp4 (1).mp4', h:200 },
+  { cat:'commercial', title:'Frams Edit', video:'videos/Frams Edit.mp4 (1).mp4', h:180 },
+  { cat:'instagram', title:'IV Edit', video:'videos/IV edit.mp4 (1).mp4', h:200 },
+  { cat:'instagram', title:'IV Edit 1', video:'videos/IV1.mp4.mp4', h:200 },
+  { cat:'wedding', title:'Invitation Video', video:'videos/Invitation.mp4 (1).mp4', h:220 },
+  { cat:'motion', title:'Murugan Edit', video:'videos/Murugan.mp4 (1).mp4', h:200 },
+  { cat:'instagram', title:'Nanban Edit', video:'videos/Nanban.mp4.mp4', h:200 },
+  { cat:'instagram', title:'Reels Edit', video:'videos/Reels.mp4.mp4', h:200 },
+  { cat:'instagram', title:'Reels Edit 1', video:'videos/Reels1.mp4.mp4', h:200 },
+  { cat:'wedding', title:'Save The Date', video:'videos/Save the date (1).mp4', h:220 },
+  { cat:'corporate', title:'Sriet Video', video:'videos/Sriet.mp4 (1).mp4', h:200 },
+  { cat:'corporate', title:'Staff Video', video:'videos/Staffs.mp4 (1).mp4', h:200 },
+  { cat:'instagram', title:'Thala Edit', video:'videos/Thala.mp4.mp4', h:200 },
+  { cat:'commercial', title:'WOne-Ten', video:'videos/WOne-Ten .mp4', h:200 }
 ];
 const grads=[
   'linear-gradient(135deg,#0f2027,#203a43)','linear-gradient(135deg,#1a1a2e,#0f3460)',
@@ -231,21 +234,87 @@ cats.forEach(c=>{
 });
 
 // Build gallery items
-const grid=document.getElementById('galleryGrid');
-galleryData.forEach((item,i)=>{
-  const div=document.createElement('div');
-  div.className='mi rev';div.dataset.cat=item.cat;
-  div.innerHTML=`
-    <div class="mi-thumb" style="height:${item.h}px;background:${grads[i%8]}">
-      <div class="mi-thumb-in">${item.emoji}</div>
+const grid = document.getElementById('galleryGrid');
+
+galleryData.forEach((item, i) => {
+
+  const div = document.createElement('div');
+
+  div.className = 'mi rev';
+  div.dataset.cat = item.cat;
+
+  div.innerHTML = `
+    <div class="mi-thumb" style="height:${item.h}px;">
+
+      <video
+        src="${item.video}"
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        style="
+          width:100%;
+          height:100%;
+          object-fit:cover;
+          display:block;
+        ">
+      </video>
+
       <div class="mi-play">▶</div>
+
       <div class="mi-overlay">
         <div class="mi-cat">${item.cat}</div>
         <div class="mi-title">${item.title}</div>
       </div>
-    </div>`;
+
+    </div>
+  `;
+
   grid.appendChild(div);
   revObs.observe(div);
+
+  // ========== VIDEO PLAY ON CLICK ==========
+document.querySelectorAll('.mi').forEach(card => {
+
+  const video = card.querySelector('video');
+
+  card.addEventListener('click', () => {
+
+    if (!video) return;
+
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
+
+  });
+
+});
+
+  // 3D tilt effect
+  div.addEventListener('mousemove', e => {
+
+    const rect = div.getBoundingClientRect();
+
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    const rx = ((e.clientY - cy) / rect.height) * 12;
+    const ry = -((e.clientX - cx) / rect.width) * 12;
+
+    div.style.transform =
+      `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-6px)`;
+
+    div.style.animationPlayState = 'paused';
+  });
+
+  div.addEventListener('mouseleave', () => {
+    div.style.transform = '';
+    div.style.animationPlayState = 'running';
+  });
+
+});
 
   // 3D tilt effect
   div.addEventListener('mousemove',e=>{
