@@ -622,7 +622,7 @@ const galleryData = [
   {
     cat: 'commercial',
     title: 'Bike Edit 2',
-    video: 'Bike2.mp4 (1).mp4',
+    videos: 'Bike2.mp4 (1).mp4',
     h: 200
   },
 
