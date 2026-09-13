@@ -671,3 +671,29 @@ footer{
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
 }
+/* ============================================================
+   PORTFOLIO VIDEO THUMBNAILS
+   ============================================================ */
+
+.mi-thumb {
+  position: relative;
+  overflow: hidden;
+}
+
+.mi-thumb video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #111;
+}
+
+.mi-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
