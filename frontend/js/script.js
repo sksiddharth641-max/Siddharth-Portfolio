@@ -678,7 +678,7 @@ const galleryData = [
   {
     cat: 'instagram',
     title: 'Nanban Edit',
-    video: 'Nanban.mp4.mp4',
+    video: 'videos/Nanban.mp4.mp4',
     h: 200
   },
 
