@@ -600,139 +600,442 @@ if (wfc) {
 
 }
 
-
 // ============================================================
-// ======================= GALLERY =============================
+// GALLERY
 // ============================================================
-
-
-// IMPORTANT:
-// Keep the file names EXACTLY the same as the files
-// inside your frontend/videos folder.
 
 const galleryData = [
-
   {
     cat: 'commercial',
     title: 'Bike Edit 1',
-    video: 'Bike1.mp4 (1).mp4',
+    video: 'videos/Bike1.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'commercial',
     title: 'Bike Edit 2',
-    video: 'Bike2.mp4 (1).mp4',
+    video: 'videos/Bike2.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'commercial',
     title: 'Car Edit',
-    video: 'Car Edit.mp4.mp4',
+    video: 'videos/Car Edit.mp4.mp4',
     h: 220
   },
-
   {
     cat: 'wedding',
     title: 'Engagement Video',
-    video: 'Engagement.mp4 (1).mp4',
+    video: 'videos/Engagement.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'commercial',
     title: 'Frams Edit',
-    video: 'Frams Edit.mp4 (1).mp4',
+    video: 'videos/Frams Edit.mp4 (1).mp4',
     h: 180
   },
-
   {
     cat: 'instagram',
     title: 'IV Edit',
-    video: 'IV edit.mp4 (1).mp4',
+    video: 'videos/IV edit.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'IV Edit 1',
-    video: 'IV1.mp4.mp4',
+    video: 'videos/IV1.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'wedding',
     title: 'Invitation Video',
-    video: 'Invitation.mp4 (1).mp4',
+    video: 'videos/Invitation.mp4 (1).mp4',
     h: 220
   },
-
   {
     cat: 'motion',
     title: 'Murugan Edit',
-    video: 'Murugan.mp4 (1).mp4',
+    video: 'videos/Murugan.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'Nanban Edit',
-    video: 'Nanban.mp4.mp4',
+    video: 'videos/Nanban.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'Reels Edit',
-    video: 'Reels.mp4.mp4',
+    video: 'videos/Reels.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'Reels Edit 1',
-    video: 'Reels1.mp4.mp4',
+    video: 'videos/Reels1.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'wedding',
     title: 'Save The Date',
-    video: 'Save the date (1).mp4',
+    video: 'videos/Save the date (1).mp4',
     h: 220
   },
-
   {
     cat: 'corporate',
     title: 'Sriet Video',
-    video: 'Sriet.mp4 (1).mp4',
+    video: 'videos/Sriet.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'corporate',
     title: 'Staff Video',
-    video: 'Staffs.mp4 (1).mp4',
+    video: 'videos/Staffs.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'Thala Edit',
-    video: 'Thala.mp4.mp4',
+    video: 'videos/Thala.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'commercial',
     title: 'WOne-Ten',
-    video: 'WOne-Ten .mp4',
+    video: 'videos/WOne-Ten .mp4',
     h: 200
   }
-
 ];
 
+
+// ============================================================
+// GRADIENT FALLBACKS
+// ============================================================
+
+const grads = [
+  'linear-gradient(135deg,#0f2027,#203a43)',
+  'linear-gradient(135deg,#1a1a2e,#0f3460)',
+  'linear-gradient(135deg,#200122,#6f0000)',
+  'linear-gradient(135deg,#0a3d0a,#145214)',
+  'linear-gradient(135deg,#2d1b69,#5b21b6)',
+  'linear-gradient(135deg,#0f0c29,#302b63)',
+  'linear-gradient(135deg,#1c1c1c,#3a3a3a)',
+  'linear-gradient(135deg,#0d1117,#1a2332)'
+];
+
+
+// ============================================================
+// FILTER TABS
+// ============================================================
+
+const cats = [
+  'all',
+  'wedding',
+  'corporate',
+  'youtube',
+  'commercial',
+  'instagram',
+  'travel',
+  'music',
+  'motion'
+];
+
+const filterDiv = document.getElementById('filterTabs');
+
+if (filterDiv) {
+
+  filterDiv.innerHTML = '';
+
+  cats.forEach(category => {
+
+    const button = document.createElement('button');
+
+    button.className =
+      'ftab' + (category === 'all' ? ' act' : '');
+
+    button.dataset.filter = category;
+
+    button.textContent =
+      category === 'all'
+        ? 'All'
+        : category.charAt(0).toUpperCase() +
+          category.slice(1);
+
+    filterDiv.appendChild(button);
+
+
+    button.addEventListener('click', () => {
+
+      document
+        .querySelectorAll('.ftab')
+        .forEach(tab => {
+          tab.classList.remove('act');
+        });
+
+      button.classList.add('act');
+
+
+      document
+        .querySelectorAll('.mi')
+        .forEach(card => {
+
+          const show =
+            category === 'all' ||
+            card.dataset.cat === category;
+
+          if (show) {
+
+            card.style.opacity = '1';
+            card.style.transform = '';
+            card.style.pointerEvents = 'auto';
+
+          } else {
+
+            card.style.opacity = '0.15';
+            card.style.transform = 'scale(.94)';
+            card.style.pointerEvents = 'none';
+
+          }
+
+        });
+
+    });
+
+  });
+
+}
+
+
+// ============================================================
+// BUILD GALLERY
+// ============================================================
+
+const grid =
+  document.getElementById('galleryGrid');
+
+if (grid) {
+
+  grid.innerHTML = '';
+
+  galleryData.forEach((item, index) => {
+
+    const card =
+      document.createElement('div');
+
+    card.className = 'mi rev';
+
+    card.dataset.cat = item.cat;
+
+
+    card.innerHTML = `
+
+      <div
+        class="mi-thumb"
+        style="
+          height:${item.h}px;
+          position:relative;
+          overflow:hidden;
+          background:${grads[index % grads.length]};
+        "
+      >
+
+        <video
+          class="portfolio-video"
+          src="${item.video}"
+          muted
+          playsinline
+          preload="metadata"
+          style="
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            display:block;
+            cursor:pointer;
+          "
+        ></video>
+
+
+        <div
+          class="mi-play"
+          style="
+            pointer-events:none;
+          "
+        >
+          ▶
+        </div>
+
+
+        <div class="mi-overlay">
+
+          <div class="mi-cat">
+            ${item.cat}
+          </div>
+
+          <div class="mi-title">
+            ${item.title}
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+
+    grid.appendChild(card);
+
+
+    // Scroll reveal
+    if (typeof revObs !== 'undefined') {
+      revObs.observe(card);
+    }
+
+
+    const video =
+      card.querySelector('.portfolio-video');
+
+    const playButton =
+      card.querySelector('.mi-play');
+
+
+    // ========================================================
+    // SHOW FIRST FRAME AS THUMBNAIL
+    // ========================================================
+
+    video.addEventListener('loadedmetadata', () => {
+
+      // Move to first frame
+      video.currentTime = 0;
+
+    });
+
+
+    video.addEventListener('seeked', () => {
+
+      // Keep video paused after creating thumbnail
+      video.pause();
+
+    });
+
+
+    // ========================================================
+    // CLICK TO PLAY / PAUSE
+    // ========================================================
+
+    card.addEventListener('click', () => {
+
+      if (video.paused) {
+
+        video.play()
+          .then(() => {
+
+            playButton.style.opacity = '0';
+
+          })
+          .catch(error => {
+
+            console.error(
+              'Could not play video:',
+              item.video,
+              error
+            );
+
+          });
+
+      } else {
+
+        video.pause();
+
+        playButton.style.opacity = '1';
+
+      }
+
+    });
+
+
+    // ========================================================
+    // WHEN VIDEO ENDS
+    // ========================================================
+
+    video.addEventListener('ended', () => {
+
+      playButton.style.opacity = '1';
+
+      video.currentTime = 0;
+
+    });
+
+
+    // ========================================================
+    // VIDEO ERROR
+    // ========================================================
+
+    video.addEventListener('error', () => {
+
+      console.error(
+        '❌ Video could not load:',
+        item.video
+      );
+
+    });
+
+
+    // ========================================================
+    // 3D TILT
+    // ========================================================
+
+    card.addEventListener('mousemove', e => {
+
+      const rect =
+        card.getBoundingClientRect();
+
+      const cx =
+        rect.left + rect.width / 2;
+
+      const cy =
+        rect.top + rect.height / 2;
+
+      const rx =
+        ((e.clientY - cy) /
+          rect.height) * 12;
+
+      const ry =
+        -((e.clientX - cx) /
+          rect.width) * 12;
+
+      card.style.transform =
+        `perspective(800px)
+         rotateX(${rx}deg)
+         rotateY(${ry}deg)
+         translateY(-6px)`;
+
+      card.style.animationPlayState =
+        'paused';
+
+    });
+
+
+    card.addEventListener('mouseleave', () => {
+
+      card.style.transform = '';
+
+      card.style.animationPlayState =
+        'running';
+
+    });
+
+  });
+
+}
+
+
+console.log(
+  '🎬 Gallery loaded:',
+  galleryData.length,
+  'videos'
+);
 
 // ============================================================
 // GRADIENTS
