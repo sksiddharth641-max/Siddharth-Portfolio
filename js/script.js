@@ -812,13 +812,9 @@ if (grid) {
           "
         >
 
-          <video
-            class="portfolio-video"
-            src="${item.video}"
-            muted
-            playsinline
-            preload="metadata"
-          ></video>
+      <div class="portfolio-video-placeholder">
+  ▶
+</div>
 
 
           <div
