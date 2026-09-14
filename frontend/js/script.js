@@ -1279,40 +1279,25 @@ async function submitContact(event) {
 // ============================================================
 // REVIEW FORM
 // ============================================================
-
 function submitReview(event) {
 
   event.preventDefault();
 
-
-  const btn =
-    event.target.querySelector(
-      'button[type="submit"]'
-    );
-
+  const btn = event.currentTarget;
 
   if (!btn) return;
 
+  const originalText = btn.innerHTML;
 
-  const originalText =
-    btn.innerHTML;
-
-
-  btn.innerHTML =
-    '✓ Review Submitted!';
-
+  btn.innerHTML = '✓ Review Submitted!';
 
   btn.style.background =
     'linear-gradient(135deg,#10b981,#06B6D4)';
 
-
   setTimeout(() => {
 
-    btn.innerHTML =
-      originalText;
-
-    btn.style.background =
-      '';
+    btn.innerHTML = originalText;
+    btn.style.background = '';
 
   }, 3000);
 
