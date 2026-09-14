@@ -763,175 +763,25 @@ function openVideoModal(
 
 }
 
-// ============================================================
-// GLASS VIDEO POPUP
-// ============================================================
-
-function openVideoModal(videoSrc, title, category) {
-
-  const oldModal = document.getElementById('videoModal');
-
-  if (oldModal) {
-    oldModal.remove();
-  }
-
-  const modal = document.createElement('div');
-
-  modal.id = 'videoModal';
-  modal.className = 'video-modal';
-
-  modal.innerHTML = `
-    
-    <div class="video-modal-backdrop"></div>
-
-    <div class="video-modal-box">
-
-      <button
-        class="video-modal-close"
-        type="button"
-      >
-        ×
-      </button>
-
-      <div class="video-modal-header">
-
-        <div>
-
-          <div class="video-modal-category">
-            ${category}
-          </div>
-
-          <div class="video-modal-title">
-            ${title}
-          </div>
-
-        </div>
-
-        <div class="video-modal-status">
-          ● NOW PLAYING
-        </div>
-
-      </div>
-
-      <div class="video-modal-player">
-
-        <video
-          class="video-modal-video"
-          src="${videoSrc}"
-          controls
-          playsinline
-          preload="auto"
-        ></video>
-
-      </div>
-
-      <div class="video-modal-footer">
-
-        <span>🎬 SID VISUALS</span>
-
-        <span>ESC to close</span>
-
-      </div>
-
-    </div>
-  `;
-
-  document.body.appendChild(modal);
-
-  document.body.classList.add('modal-open');
-
-  requestAnimationFrame(() => {
-    modal.classList.add('active');
-  });
-
-
-  const popupVideo =
-    modal.querySelector('.video-modal-video');
-
-  const closeButton =
-    modal.querySelector('.video-modal-close');
-
-  const backdrop =
-    modal.querySelector('.video-modal-backdrop');
-
-
-  function closeModal() {
-
-    modal.classList.remove('active');
-
-    document.body.classList.remove('modal-open');
-
-    if (popupVideo) {
-      popupVideo.pause();
-      popupVideo.removeAttribute('src');
-      popupVideo.load();
-    }
-
-    setTimeout(() => {
-
-      if (modal.parentNode) {
-        modal.remove();
-      }
-
-    }, 350);
-
-  }
-
-
-  closeButton.addEventListener(
-    'click',
-    closeModal
-  );
-
-
-  backdrop.addEventListener(
-    'click',
-    closeModal
-  );
-
-
-  document.addEventListener(
-    'keydown',
-    function escHandler(e) {
-
-      if (e.key === 'Escape') {
-
-        closeModal();
-
-        document.removeEventListener(
-          'keydown',
-          escHandler
-        );
-
-      }
-
-    }
-  );
-
-
-  const box =
-    modal.querySelector('.video-modal-box');
-
-  box.addEventListener(
-    'click',
-    e => e.stopPropagation()
-  );
-
-}
-
 
 // ============================================================
 // BUILD GALLERY
 // ============================================================
 
 const grid =
-  document.getElementById('galleryGrid');
+  document.getElementById(
+    'galleryGrid'
+  );
 
 
 if (grid) {
 
+  // Clear old gallery
+
   grid.innerHTML = '';
 
+
+  // Create every gallery card
 
   galleryData.forEach(
     (item, index) => {
@@ -939,22 +789,16 @@ if (grid) {
       const card =
         document.createElement('div');
 
+
       card.className =
         'mi rev';
+
 
       card.dataset.cat =
         item.cat;
 
 
-      card.dataset.video =
-        item.video;
-
-      card.dataset.title =
-        item.title;
-
-      card.dataset.category =
-        item.cat;
-
+      // Card HTML
 
       card.innerHTML = `
 
@@ -974,8 +818,8 @@ if (grid) {
             muted
             playsinline
             preload="metadata"
-            tabindex="-1"
           ></video>
+
 
           <div
             class="mi-play"
@@ -985,6 +829,7 @@ if (grid) {
           >
             ▶
           </div>
+
 
           <div class="mi-overlay">
 
@@ -1003,11 +848,16 @@ if (grid) {
       `;
 
 
+      // Add card to gallery
+
       grid.appendChild(card);
 
 
+      // Scroll reveal observer
+
       if (
-        typeof revObs !== 'undefined' &&
+        typeof revObs !==
+        'undefined' &&
         revObs
       ) {
 
@@ -1015,114 +865,113 @@ if (grid) {
 
       }
 
-    }
-  );
 
-
-  // ==========================================================
-  // IMPORTANT: GALLERY CLICK HANDLER
-  // ==========================================================
-
-  grid.addEventListener(
-    'click',
-    function(event) {
-
-      const card =
-        event.target.closest('.mi');
-
-
-      if (!card) {
-        return;
-      }
-
-
-      // STOP THE VIDEO FROM PLAYING
-
-      event.preventDefault();
-
-      event.stopPropagation();
-
-      event.stopImmediatePropagation();
-
+      // Get card video
 
       const video =
-        card.querySelector('.portfolio-video');
-
-
-      if (video) {
-
-        video.pause();
-
-        video.currentTime = 0;
-
-      }
-
-
-      const videoSrc =
-        card.dataset.video;
-
-      const title =
-        card.dataset.title;
-
-      const category =
-        card.dataset.category;
-
-
-      console.log(
-        '🎬 POPUP OPEN:',
-        title,
-        videoSrc
-      );
-
-
-      openVideoModal(
-        videoSrc,
-        title,
-        category
-      );
-
-    },
-    true
-  );
-
-
-  // ==========================================================
-  // PREVENT GALLERY VIDEO PLAYBACK
-  // ==========================================================
-
-  grid.addEventListener(
-    'play',
-    function(event) {
-
-      const video =
-        event.target.closest(
+        card.querySelector(
           '.portfolio-video'
         );
 
 
-      if (video) {
+      // Load first frame
 
-        video.pause();
+      video.addEventListener(
+        'loadedmetadata',
+        () => {
 
-        video.currentTime = 0;
+          try {
 
-      }
+            video.currentTime = 0;
 
-    },
-    true
-  );
+          } catch (error) {
+
+            console.log(
+              'Could not set first frame:',
+              error
+            );
+
+          }
+
+        }
+      );
 
 
-  // ==========================================================
-  // 3D CARD EFFECT
-  // ==========================================================
+      // Make sure card video NEVER plays
 
-  grid.querySelectorAll('.mi').forEach(
-    card => {
+      video.addEventListener(
+        'play',
+        () => {
+
+          video.pause();
+
+        }
+      );
+
+
+      // Pause after seeking
+
+      video.addEventListener(
+        'seeked',
+        () => {
+
+          video.pause();
+
+        }
+      );
+
+
+      // ======================================================
+      // CARD CLICK → OPEN POPUP
+      // ======================================================
+
+      card.addEventListener(
+        'click',
+        (event) => {
+
+          event.preventDefault();
+
+          event.stopPropagation();
+
+
+          console.log(
+            '🎬 OPENING VIDEO POPUP:',
+            item.title
+          );
+
+
+          openVideoModal(
+            item.video,
+            item.title,
+            item.cat
+          );
+
+        }
+      );
+
+
+      // Video loading error
+
+      video.addEventListener(
+        'error',
+        () => {
+
+          console.error(
+            '❌ Video could not load:',
+            item.video
+          );
+
+        }
+      );
+
+
+      // ======================================================
+      // 3D CARD EFFECT
+      // ======================================================
 
       card.addEventListener(
         'mousemove',
-        event => {
+        (event) => {
 
           const rect =
             card.getBoundingClientRect();
@@ -1140,12 +989,14 @@ if (grid) {
 
           const rotateX =
             ((event.clientY - centerY) /
-              rect.height) * 12;
+              rect.height) *
+            12;
 
 
           const rotateY =
             -((event.clientX - centerX) /
-              rect.width) * 12;
+              rect.width) *
+            12;
 
 
           card.style.transform =
@@ -1155,6 +1006,10 @@ if (grid) {
               rotateY(${rotateY}deg)
               translateY(-6px)
             `;
+
+
+          card.style.animationPlayState =
+            'paused';
 
         }
       );
@@ -1166,6 +1021,9 @@ if (grid) {
 
           card.style.transform = '';
 
+          card.style.animationPlayState =
+            'running';
+
         }
       );
 
@@ -1175,10 +1033,152 @@ if (grid) {
 }
 
 
+// ============================================================
+// CONTACT FORM
+// ============================================================
+
+const contactForm =
+  document.getElementById(
+    'contactForm'
+  );
+
+
+if (contactForm) {
+
+  contactForm.addEventListener(
+    'submit',
+    async (event) => {
+
+      event.preventDefault();
+
+
+      const formData =
+        new FormData(contactForm);
+
+
+      const data = {
+
+        name:
+          formData.get('name'),
+
+        email:
+          formData.get('email'),
+
+        phone:
+          formData.get('phone'),
+
+        message:
+          formData.get('message')
+
+      };
+
+
+      try {
+
+        const response =
+          await fetch(
+            '/api/contact',
+            {
+
+              method: 'POST',
+
+              headers: {
+                'Content-Type':
+                  'application/json'
+              },
+
+              body:
+                JSON.stringify(data)
+
+            }
+          );
+
+
+        const result =
+          await response.json();
+
+
+        console.log(
+          'Contact response:',
+          result
+        );
+
+
+        if (response.ok) {
+
+          alert(
+            'Message sent successfully!'
+          );
+
+          contactForm.reset();
+
+        } else {
+
+          alert(
+            'Something went wrong. Please try again.'
+          );
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          'Contact form error:',
+          error
+        );
+
+        alert(
+          'Unable to send message right now.'
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+// ============================================================
+// REVIEW FORM
+// ============================================================
+
+const reviewForm =
+  document.getElementById(
+    'reviewForm'
+  );
+
+
+if (reviewForm) {
+
+  reviewForm.addEventListener(
+    'submit',
+    (event) => {
+
+      event.preventDefault();
+
+      console.log(
+        'Review submitted'
+      );
+
+      alert(
+        'Thank you for your review!'
+      );
+
+      reviewForm.reset();
+
+    }
+  );
+
+}
+
+
+// ============================================================
+// FINAL LOG
+// ============================================================
+
 console.log(
-  '🎬 Gallery loaded:',
-  galleryData.length,
-  'videos'
+  '🎬 SID VISUALS portfolio loaded successfully.'
 );
 
 console.log(
