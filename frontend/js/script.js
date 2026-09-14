@@ -858,7 +858,6 @@ function openVideoModal(videoSrc, title, category) {
   const popupVideo = modal.querySelector('.video-modal-video');
 
   setTimeout(() => {
-  popupVideo.muted = true;
   popupVideo.play().catch(() => {});
 }, 300);
 
@@ -1077,7 +1076,6 @@ if (grid) {
     e.stopPropagation();
 
     video.pause();
-    video.muted = true;
     video.currentTime = 0;
 
     const videoSrc =
