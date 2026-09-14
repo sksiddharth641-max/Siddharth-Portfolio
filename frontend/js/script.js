@@ -858,8 +858,9 @@ function openVideoModal(videoSrc, title, category) {
   const popupVideo = modal.querySelector('.video-modal-video');
 
   setTimeout(() => {
-    popupVideo.play().catch(() => {});
-  }, 300);
+  popupVideo.muted = true;
+  popupVideo.play().catch(() => {});
+}, 300);
 
   function closeModal() {
     popupVideo.pause();
@@ -988,66 +989,7 @@ if (grid) {
       video.pause();
 
     });
-
-  });
-
-
-  // ========================================================
-  // OPEN VIDEO IN POPUP
-  // ========================================================
-
-  grid.addEventListener('click', function (e) {
-
-    const card = e.target.closest('.mi');
-
-    if (!card) return;
-
-    const video =
-      card.querySelector('.portfolio-video');
-
-    if (!video) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Stop thumbnail completely
-    video.pause();
-    video.muted = true;
-    video.currentTime = 0;
-
-    const videoSrc =
-      video.getAttribute('src');
-
-    const title =
-      card.querySelector('.mi-title')
-        ?.textContent.trim()
-        || 'Project';
-
-    const category =
-      card.querySelector('.mi-cat')
-        ?.textContent.trim()
-        || '';
-
-    console.log(
-      '🎬 POPUP:',
-      title,
-      videoSrc
-    );
-
-    openVideoModal(
-      videoSrc,
-      title,
-      category
-    );
-
-  });
-
-}
-    // ========================================================
-    // CLICK TO PLAY / PAUSE
-    // ========================================================
-
-
+    
     // ========================================================
     // WHEN VIDEO ENDS
     // ========================================================
@@ -1109,27 +1051,69 @@ if (grid) {
 
     });
 
-
-    card.addEventListener('mouseleave', () => {
+        card.addEventListener('mouseleave', () => {
 
       card.style.transform = '';
-
-      card.style.animationPlayState =
-        'running';
+      card.style.animationPlayState = 'running';
 
     });
 
   });
+    // ========================================================
+  // OPEN VIDEO IN POPUP
+  // ========================================================
+
+  grid.addEventListener('click', function (e) {
+
+    const card = e.target.closest('.mi');
+
+    if (!card) return;
+
+    const video =
+      card.querySelector('.portfolio-video');
+
+    if (!video) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    video.pause();
+    video.muted = true;
+    video.currentTime = 0;
+
+    const videoSrc =
+      video.getAttribute('src');
+
+    const title =
+      card.querySelector('.mi-title')
+        ?.textContent.trim()
+        || 'Project';
+
+    const category =
+      card.querySelector('.mi-cat')
+        ?.textContent.trim()
+        || '';
+
+    console.log(
+      '🎬 POPUP:',
+      title,
+      videoSrc
+    );
+
+    openVideoModal(
+      videoSrc,
+      title,
+      category
+    );
+
+  });
 
 }
-
-
 console.log(
   '🎬 Gallery loaded:',
   galleryData.length,
   'videos'
 );
-
 // ============================================================
 // CONTACT FORM
 // ============================================================
@@ -1293,20 +1277,8 @@ async function submitContact(event) {
 
   btn.disabled = false;
 
-
-  setTimeout(() => {
-
-    btn.innerHTML =
-      originalText;
-
-    btn.style.background =
-      '';
-
-  }, 3000);
-
 }
-
-
+    
 // ============================================================
 // REVIEW FORM
 // ============================================================
