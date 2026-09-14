@@ -912,14 +912,20 @@ if (grid) {
         "
       >
 
-  <video
-  class="video-modal-video"
-  src="${videoSrc}"
-  controls
-  playsinline
-  muted
-  preload="auto"
-></video>
+        <video
+          class="portfolio-video"
+          src="${item.video}"
+          muted
+          playsinline
+          preload="metadata"
+          style="
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            display:block;
+            cursor:pointer;
+          "
+        ></video>
 
 
         <div
@@ -950,6 +956,28 @@ if (grid) {
 
 
     grid.appendChild(card);
+    
+    grid.addEventListener('click', function (e) {
+  const card = e.target.closest('.mi');
+  if (!card) return;
+
+  const video = card.querySelector('.portfolio-video');
+  if (!video) return;
+
+  e.preventDefault();
+  e.stopPropagation();
+
+  // Stop thumbnail video
+  video.pause();
+  video.currentTime = 0;
+
+  // Get actual information directly from the card
+  const videoSrc = video.getAttribute('src');
+  const title = card.querySelector('.mi-title')?.textContent.trim() || 'Project';
+  const category = card.querySelector('.mi-cat')?.textContent.trim() || '';
+
+  openVideoModal(videoSrc, title, category);
+});
 
     // Scroll reveal
     if (typeof revObs !== 'undefined') {
@@ -987,6 +1015,37 @@ if (grid) {
     // ========================================================
     // CLICK TO PLAY / PAUSE
     // ========================================================
+
+    card.addEventListener('click', () => {
+
+      if (video.paused) {
+
+        video.play()
+          .then(() => {
+
+            playButton.style.opacity = '0';
+
+          })
+          .catch(error => {
+
+            console.error(
+              'Could not play video:',
+              item.video,
+              error
+            );
+
+          });
+
+      } else {
+
+        video.pause();
+
+        playButton.style.opacity = '1';
+
+      }
+
+    });
+
 
     // ========================================================
     // WHEN VIDEO ENDS
@@ -1062,56 +1121,7 @@ if (grid) {
   });
 
 }
-  });
 
-
-  // ============================================================
-  // PROJECT POPUP - ONE CLICK HANDLER
-  // ============================================================
-
-  grid.addEventListener('click', function (e) {
-
-    const card = e.target.closest('.mi');
-
-    if (!card) return;
-
-    const video = card.querySelector('.portfolio-video');
-
-    if (!video) return;
-
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Keep thumbnail completely silent and paused
-    video.pause();
-    video.muted = true;
-    video.currentTime = 0;
-
-    const videoSrc = video.getAttribute('src');
-
-    const title =
-      card.querySelector('.mi-title')?.textContent.trim()
-      || 'Project';
-
-    const category =
-      card.querySelector('.mi-cat')?.textContent.trim()
-      || '';
-
-    console.log('🎬 POPUP:', title, videoSrc);
-
-    openVideoModal(
-      videoSrc,
-      title,
-      category
-    );
-
-  });
-
-}
-
-
-console.log(
-  '🎬 Gallery loaded:',
 
 console.log(
   '🎬 Gallery loaded:',
@@ -1283,10 +1293,17 @@ async function submitContact(event) {
   btn.disabled = false;
 
 
-setTimeout(() => {
-  popupVideo.muted = true;
-  popupVideo.play().catch(() => {});
-}, 300);
+  setTimeout(() => {
+
+    btn.innerHTML =
+      originalText;
+
+    btn.style.background =
+      '';
+
+  }, 3000);
+
+}
 
 
 // ============================================================
