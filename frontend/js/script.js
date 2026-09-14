@@ -916,7 +916,6 @@ if (grid) {
         <video
           class="portfolio-video"
           src="${item.video}"
-          muted
           playsinline
           preload="metadata"
           style="
