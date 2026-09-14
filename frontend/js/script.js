@@ -599,218 +599,10 @@ if (wfc) {
     `).join('');
 
 }
-
-// ============================================================
-// GALLERY
-// ============================================================
-
-const galleryData = [
-  {
-    cat: 'commercial',
-    title: 'Bike Edit 1',
-    video: 'videos/Bike1.mp4 (1).mp4',
-    h: 200
-  },
-  {
-    cat: 'commercial',
-    title: 'Bike Edit 2',
-    video: 'videos/Bike2.mp4 (1).mp4',
-    h: 200
-  },
-  {
-    cat: 'commercial',
-    title: 'Car Edit',
-    video: 'videos/Car Edit.mp4.mp4',
-    h: 220
-  },
-  {
-    cat: 'wedding',
-    title: 'Engagement Video',
-    video: 'videos/Engagement.mp4 (1).mp4',
-    h: 200
-  },
-  {
-    cat: 'commercial',
-    title: 'Frams Edit',
-    video: 'videos/Frams Edit.mp4 (1).mp4',
-    h: 180
-  },
-  {
-    cat: 'instagram',
-    title: 'IV Edit',
-    video: 'videos/IV edit.mp4 (1).mp4',
-    h: 200
-  },
-  {
-    cat: 'instagram',
-    title: 'IV Edit 1',
-    video: 'videos/IV1.mp4.mp4',
-    h: 200
-  },
-  {
-    cat: 'wedding',
-    title: 'Invitation Video',
-    video: 'videos/Invitation.mp4 (1).mp4',
-    h: 220
-  },
-  {
-    cat: 'motion',
-    title: 'Murugan Edit',
-    video: 'videos/Murugan.mp4 (1).mp4',
-    h: 200
-  },
-  {
-    cat: 'instagram',
-    title: 'Nanban Edit',
-    video: 'videos/Nanban.mp4.mp4',
-    h: 200
-  },
-  {
-    cat: 'instagram',
-    title: 'Reels Edit',
-    video: 'videos/Reels.mp4.mp4',
-    h: 200
-  },
-  {
-    cat: 'instagram',
-    title: 'Reels Edit 1',
-    video: 'videos/Reels1.mp4.mp4',
-    h: 200
-  },
-  {
-    cat: 'wedding',
-    title: 'Save The Date',
-    video: 'videos/Save the date (1).mp4',
-    h: 220
-  },
-  {
-    cat: 'corporate',
-    title: 'Sriet Video',
-    video: 'videos/Sriet.mp4 (1).mp4',
-    h: 200
-  },
-  {
-    cat: 'corporate',
-    title: 'Staff Video',
-    video: 'videos/Staffs.mp4 (1).mp4',
-    h: 200
-  },
-  {
-    cat: 'instagram',
-    title: 'Thala Edit',
-    video: 'videos/Thala.mp4.mp4',
-    h: 200
-  },
-  {
-    cat: 'commercial',
-    title: 'WOne-Ten',
-    video: 'videos/WOne-Ten .mp4',
-    h: 200
-  }
-];
-
-
-// ============================================================
-// GRADIENT FALLBACKS
-// ============================================================
-
-const grads = [
-  'linear-gradient(135deg,#0f2027,#203a43)',
-  'linear-gradient(135deg,#1a1a2e,#0f3460)',
-  'linear-gradient(135deg,#200122,#6f0000)',
-  'linear-gradient(135deg,#0a3d0a,#145214)',
-  'linear-gradient(135deg,#2d1b69,#5b21b6)',
-  'linear-gradient(135deg,#0f0c29,#302b63)',
-  'linear-gradient(135deg,#1c1c1c,#3a3a3a)',
-  'linear-gradient(135deg,#0d1117,#1a2332)'
-];
-
-
-// ============================================================
-// FILTER TABS
-// ============================================================
-
-const cats = [
-  'all',
-  'wedding',
-  'corporate',
-  'youtube',
-  'commercial',
-  'instagram',
-  'travel',
-  'music',
-  'motion'
-];
-
-const filterDiv = document.getElementById('filterTabs');
-
-if (filterDiv) {
-
-  filterDiv.innerHTML = '';
-
-  cats.forEach(category => {
-
-    const button = document.createElement('button');
-
-    button.className =
-      'ftab' + (category === 'all' ? ' act' : '');
-
-    button.dataset.filter = category;
-
-    button.textContent =
-      category === 'all'
-        ? 'All'
-        : category.charAt(0).toUpperCase() +
-          category.slice(1);
-
-    filterDiv.appendChild(button);
-
-
-    button.addEventListener('click', () => {
-
-      document
-        .querySelectorAll('.ftab')
-        .forEach(tab => {
-          tab.classList.remove('act');
-        });
-
-      button.classList.add('act');
-
-
-      document
-        .querySelectorAll('.mi')
-        .forEach(card => {
-
-          const show =
-            category === 'all' ||
-            card.dataset.cat === category;
-
-          if (show) {
-
-            card.style.opacity = '1';
-            card.style.transform = '';
-            card.style.pointerEvents = 'auto';
-
-          } else {
-
-            card.style.opacity = '0.15';
-            card.style.transform = 'scale(.94)';
-            card.style.pointerEvents = 'none';
-
-          }
-
-        });
-
-    });
-
-  });
-
-}
-
-
 // ============================================================
 // BUILD GALLERY
 // ============================================================
+
 function openVideoModal(videoSrc, title, category) {
   const oldModal = document.getElementById('videoModal');
   if (oldModal) oldModal.remove();
@@ -838,6 +630,7 @@ function openVideoModal(videoSrc, title, category) {
           src="${videoSrc}"
           controls
           playsinline
+          muted
           preload="auto"
         ></video>
       </div>
@@ -855,34 +648,51 @@ function openVideoModal(videoSrc, title, category) {
     modal.classList.add('active');
   });
 
-  const popupVideo = modal.querySelector('.video-modal-video');
+  const popupVideo =
+    modal.querySelector('.video-modal-video');
 
   setTimeout(() => {
+    popupVideo.muted = true;
     popupVideo.play().catch(() => {});
   }, 300);
 
   function closeModal() {
     popupVideo.pause();
+
     modal.classList.remove('active');
     document.body.classList.remove('modal-open');
 
-    setTimeout(() => modal.remove(), 400);
+    setTimeout(() => {
+      modal.remove();
+    }, 400);
 
-    document.removeEventListener('keydown', escapeHandler);
+    document.removeEventListener(
+      'keydown',
+      escapeHandler
+    );
   }
 
   function escapeHandler(e) {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') {
+      closeModal();
+    }
   }
 
-  modal.querySelector('.video-modal-close')
+  modal
+    .querySelector('.video-modal-close')
     .addEventListener('click', closeModal);
 
-  modal.querySelector('.video-modal-backdrop')
+  modal
+    .querySelector('.video-modal-backdrop')
     .addEventListener('click', closeModal);
 
-  document.addEventListener('keydown', escapeHandler);
+  document.addEventListener(
+    'keydown',
+    escapeHandler
+  );
 }
+
+
 const grid =
   document.getElementById('galleryGrid');
 
@@ -899,9 +709,7 @@ if (grid) {
 
     card.dataset.cat = item.cat;
 
-
     card.innerHTML = `
-
       <div
         class="mi-thumb"
         style="
@@ -924,9 +732,9 @@ if (grid) {
             object-fit:cover;
             display:block;
             cursor:pointer;
+            pointer-events:none;
           "
         ></video>
-
 
         <div
           class="mi-play"
@@ -936,7 +744,6 @@ if (grid) {
         >
           ▶
         </div>
-
 
         <div class="mi-overlay">
 
@@ -951,39 +758,14 @@ if (grid) {
         </div>
 
       </div>
-
     `;
 
-
     grid.appendChild(card);
-    
-    grid.addEventListener('click', function (e) {
-  const card = e.target.closest('.mi');
-  if (!card) return;
-
-  const video = card.querySelector('.portfolio-video');
-  if (!video) return;
-
-  e.preventDefault();
-  e.stopPropagation();
-
-  // Stop thumbnail video
-  video.pause();
-  video.currentTime = 0;
-
-  // Get actual information directly from the card
-  const videoSrc = video.getAttribute('src');
-  const title = card.querySelector('.mi-title')?.textContent.trim() || 'Project';
-  const category = card.querySelector('.mi-cat')?.textContent.trim() || '';
-
-  openVideoModal(videoSrc, title, category);
-});
 
     // Scroll reveal
     if (typeof revObs !== 'undefined') {
       revObs.observe(card);
     }
-
 
     const video =
       card.querySelector('.portfolio-video');
@@ -998,7 +780,6 @@ if (grid) {
 
     video.addEventListener('loadedmetadata', () => {
 
-      // Move to first frame
       video.currentTime = 0;
 
     });
@@ -1006,43 +787,7 @@ if (grid) {
 
     video.addEventListener('seeked', () => {
 
-      // Keep video paused after creating thumbnail
       video.pause();
-
-    });
-
-
-    // ========================================================
-    // CLICK TO PLAY / PAUSE
-    // ========================================================
-
-    card.addEventListener('click', () => {
-
-      if (video.paused) {
-
-        video.play()
-          .then(() => {
-
-            playButton.style.opacity = '0';
-
-          })
-          .catch(error => {
-
-            console.error(
-              'Could not play video:',
-              item.video,
-              error
-            );
-
-          });
-
-      } else {
-
-        video.pause();
-
-        playButton.style.opacity = '1';
-
-      }
 
     });
 
@@ -1056,6 +801,8 @@ if (grid) {
       playButton.style.opacity = '1';
 
       video.currentTime = 0;
+
+      video.pause();
 
     });
 
@@ -1120,6 +867,62 @@ if (grid) {
 
   });
 
+
+  // ============================================================
+  // OPEN VIDEO POPUP
+  // ============================================================
+
+  grid.addEventListener('click', function (e) {
+
+    const card =
+      e.target.closest('.mi');
+
+    if (!card) return;
+
+    const video =
+      card.querySelector('.portfolio-video');
+
+    if (!video) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Make sure thumbnail NEVER plays
+    video.pause();
+    video.muted = true;
+    video.currentTime = 0;
+
+    const videoSrc =
+      video.getAttribute('src');
+
+    const title =
+      card
+        .querySelector('.mi-title')
+        ?.textContent
+        .trim()
+        || 'Project';
+
+    const category =
+      card
+        .querySelector('.mi-cat')
+        ?.textContent
+        .trim()
+        || '';
+
+    console.log(
+      '🎬 POPUP:',
+      title,
+      videoSrc
+    );
+
+    openVideoModal(
+      videoSrc,
+      title,
+      category
+    );
+
+  });
+
 }
 
 
@@ -1128,6 +931,7 @@ console.log(
   galleryData.length,
   'videos'
 );
+```
 
 // ============================================================
 // CONTACT FORM
