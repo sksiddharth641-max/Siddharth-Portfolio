@@ -813,6 +813,78 @@ if (filterDiv) {
 // ============================================================
 
 const grid =
+  function openVideoModal(videoSrc, title, category) {
+  const oldModal = document.getElementById('videoModal');
+  if (oldModal) oldModal.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'videoModal';
+  modal.className = 'video-modal';
+
+  modal.innerHTML = `
+    <div class="video-modal-backdrop"></div>
+
+    <div class="video-modal-box">
+      <button class="video-modal-close" type="button">×</button>
+
+      <div class="video-modal-header">
+        <div>
+          <div class="video-modal-category">${category}</div>
+          <div class="video-modal-title">${title}</div>
+        </div>
+      </div>
+
+      <div class="video-modal-player">
+        <video
+          class="video-modal-video"
+          src="${videoSrc}"
+          controls
+          autoplay
+          playsinline
+          preload="auto"
+        ></video>
+      </div>
+
+      <div class="video-modal-footer">
+        <span>SID VISUALS</span>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  document.body.classList.add('modal-open');
+
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+  });
+
+  const popupVideo = modal.querySelector('.video-modal-video');
+
+  popupVideo.play().catch(() => {});
+
+  function closeModal() {
+    popupVideo.pause();
+    modal.classList.remove('active');
+    document.body.classList.remove('modal-open');
+
+    setTimeout(() => {
+      modal.remove();
+    }, 400);
+
+    document.removeEventListener('keydown', escHandler);
+  }
+
+  function escHandler(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  }
+
+  modal.querySelector('.video-modal-close').addEventListener('click', closeModal);
+  modal.querySelector('.video-modal-backdrop').addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', escHandler);
+}
   document.getElementById('galleryGrid');
 
 if (grid) {
