@@ -1064,3 +1064,7 @@ body.modal-open {
   }
 
 }
+/* Prevent gallery videos from receiving clicks */
+.mi-thumb video.portfolio-video {
+  pointer-events: none !important;
+}
