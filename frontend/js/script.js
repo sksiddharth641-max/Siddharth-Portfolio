@@ -956,22 +956,27 @@ if (grid) {
 
 
     grid.appendChild(card);
-card.addEventListener('click', function(e) {
+    
+    grid.addEventListener('click', function (e) {
+  const card = e.target.closest('.mi');
+  if (!card) return;
+
+  const video = card.querySelector('.portfolio-video');
+  if (!video) return;
+
   e.preventDefault();
   e.stopPropagation();
 
-  const video = card.querySelector('.portfolio-video');
+  // Stop thumbnail video
+  video.pause();
+  video.currentTime = 0;
 
-  if (video) {
-    video.pause();
-    video.currentTime = 0;
-  }
+  // Get actual information directly from the card
+  const videoSrc = video.getAttribute('src');
+  const title = card.querySelector('.mi-title')?.textContent.trim() || 'Project';
+  const category = card.querySelector('.mi-cat')?.textContent.trim() || '';
 
-  openVideoModal(
-    card.dataset.video,
-    card.dataset.title,
-    card.dataset.category
-  );
+  openVideoModal(videoSrc, title, category);
 });
 
     // Scroll reveal
