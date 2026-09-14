@@ -920,40 +920,13 @@ if (grid) {
     });
 
 
-    // ========================================================
-    // CLICK TO PLAY / PAUSE
-    // ========================================================
+   // ========================================================
+// CLICK → OPEN GLASS VIDEO POPUP
+// ========================================================
 
-    card.addEventListener('click', () => {
-
-      if (video.paused) {
-
-        video.play()
-          .then(() => {
-
-            playButton.style.opacity = '0';
-
-          })
-          .catch(error => {
-
-            console.error(
-              'Could not play video:',
-              item.video,
-              error
-            );
-
-          });
-
-      } else {
-
-        video.pause();
-
-        playButton.style.opacity = '1';
-
-      }
-
-    });
-
+card.addEventListener('click', () => {
+  openVideoModal(item.video, item.title, item.cat);
+});
 
     // ========================================================
     // WHEN VIDEO ENDS
@@ -966,7 +939,179 @@ if (grid) {
       video.currentTime = 0;
 
     });
+// ============================================================
+// GLASS VIDEO MODAL
+// ============================================================
 
+function openVideoModal(videoSrc, title, category) {
+
+  // Remove existing modal if any
+  const existingModal =
+    document.getElementById('videoModal');
+
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  // Create modal
+  const modal =
+    document.createElement('div');
+
+  modal.id = 'videoModal';
+  modal.className = 'video-modal';
+
+  modal.innerHTML = `
+
+    <div class="video-modal-backdrop"></div>
+
+    <div class="video-modal-box">
+
+      <button
+        class="video-modal-close"
+        aria-label="Close video"
+      >
+        ×
+      </button>
+
+      <div class="video-modal-header">
+
+        <div>
+          <div class="video-modal-category">
+            ${category}
+          </div>
+
+          <div class="video-modal-title">
+            ${title}
+          </div>
+        </div>
+
+        <div class="video-modal-status">
+          ● NOW PLAYING
+        </div>
+
+      </div>
+
+      <div class="video-modal-player">
+
+        <video
+          class="video-modal-video"
+          src="${videoSrc}"
+          controls
+          autoplay
+          playsinline
+          preload="auto"
+        ></video>
+
+      </div>
+
+      <div class="video-modal-footer">
+
+        <span>
+          🎬 SID VISUALS
+        </span>
+
+        <span>
+          ESC to close
+        </span>
+
+      </div>
+
+    </div>
+
+  `;
+
+  document.body.appendChild(modal);
+
+  // Prevent background scrolling
+  document.body.classList.add('modal-open');
+
+  // Animate in
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+  });
+
+  const modalVideo =
+    modal.querySelector('.video-modal-video');
+
+  const closeButton =
+    modal.querySelector('.video-modal-close');
+
+  const backdrop =
+    modal.querySelector('.video-modal-backdrop');
+
+
+  // ----------------------------------------------------------
+  // CLOSE FUNCTION
+  // ----------------------------------------------------------
+
+  function closeVideoModal() {
+
+    modal.classList.remove('active');
+
+    document.body.classList.remove('modal-open');
+
+    if (modalVideo) {
+      modalVideo.pause();
+      modalVideo.currentTime = 0;
+    }
+
+    setTimeout(() => {
+
+      if (modal && modal.parentNode) {
+        modal.remove();
+      }
+
+    }, 350);
+
+  }
+
+
+  // Close button
+  closeButton.addEventListener(
+    'click',
+    closeVideoModal
+  );
+
+
+  // Click outside player
+  backdrop.addEventListener(
+    'click',
+    closeVideoModal
+  );
+
+
+  // ESC key
+  function escapeHandler(e) {
+
+    if (e.key === 'Escape') {
+
+      closeVideoModal();
+
+      document.removeEventListener(
+        'keydown',
+        escapeHandler
+      );
+
+    }
+
+  }
+
+  document.addEventListener(
+    'keydown',
+    escapeHandler
+  );
+
+
+  // Prevent clicks inside box from closing
+  const modalBox =
+    modal.querySelector('.video-modal-box');
+
+  modalBox.addEventListener(
+    'click',
+    e => e.stopPropagation()
+  );
+
+}
 
     // ========================================================
     // VIDEO ERROR
