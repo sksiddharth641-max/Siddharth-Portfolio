@@ -872,3 +872,19 @@ body.modal-open {
     right: 8px;
   }
 }
+.drv-folder {
+  text-decoration: none !important;
+}
+
+.drv-folder:hover {
+  text-decoration: none !important;
+}
+
+.drv-folder .drv-name {
+  color: var(--white);
+  text-decoration: none;
+}
+
+.drv-folder .drv-count {
+  text-decoration: none;
+}
