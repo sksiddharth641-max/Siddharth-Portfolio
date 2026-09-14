@@ -1,163 +1,447 @@
 // ============================================================
-// SID VISUALS - MAIN JAVASCRIPT
-// ============================================================
-
-
-// ============================================================
 // POINTER LIGHT
 // ============================================================
 
-const pointerLight = document.querySelector('.pointer-light');
+const pl = document.getElementById('pointer-light');
 
-if (pointerLight) {
-
-  document.addEventListener('mousemove', (e) => {
-
-    pointerLight.style.left = e.clientX + 'px';
-    pointerLight.style.top = e.clientY + 'px';
-
-  });
-
+if (pl) {
+  document.addEventListener('mousemove', e => {
+    pl.style.left = e.clientX + 'px';
+    pl.style.top = e.clientY + 'px';
+  }, { passive: true });
 }
 
 
 // ============================================================
-// BACKGROUND CANVAS
+// BACKGROUND CANVAS - EDITING THEMED
 // ============================================================
 
-const canvas = document.getElementById('bgCanvas');
+(function () {
 
-if (canvas) {
+  const canvas = document.getElementById('bg-canvas');
+
+  if (!canvas) return;
 
   const ctx = canvas.getContext('2d');
 
+  let W, H;
+  let nodes = [];
+  let filmStrips = [];
   let particles = [];
 
-  function resizeCanvas() {
+  function resize() {
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
 
   }
 
-  resizeCanvas();
+  resize();
 
-  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('resize', resize, { passive: true });
 
-  for (let i = 0; i < 60; i++) {
 
-    particles.push({
+  // Floating timeline nodes
+  for (let i = 0; i < 18; i++) {
 
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-
-      size: Math.random() * 2 + 0.5,
-
-      speedX: (Math.random() - 0.5) * 0.4,
-      speedY: (Math.random() - 0.5) * 0.4
-
+    nodes.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      r: 2 + Math.random() * 3,
+      color: Math.random() > 0.5
+        ? 'rgba(59,130,246,'
+        : 'rgba(139,92,246,',
+      opacity: 0.1 + Math.random() * 0.2
     });
 
   }
 
-  function animateParticles() {
 
-    ctx.clearRect(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+  // Film strips
+  for (let i = 0; i < 6; i++) {
 
-    particles.forEach((p) => {
+    filmStrips.push({
+      y: Math.random() * H,
+      speed: 0.15 + Math.random() * 0.25,
+      opacity: 0.03 + Math.random() * 0.04,
+      width: 80 + Math.random() * 120
+    });
 
-      p.x += p.speedX;
-      p.y += p.speedY;
+  }
 
-      if (p.x < 0) p.x = canvas.width;
-      if (p.x > canvas.width) p.x = 0;
 
-      if (p.y < 0) p.y = canvas.height;
-      if (p.y > canvas.height) p.y = 0;
+  // Floating particles
+  for (let i = 0; i < 30; i++) {
+
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vy: -0.2 - Math.random() * 0.4,
+      vx: (Math.random() - 0.5) * 0.15,
+      size: 1 + Math.random() * 2,
+      opacity: 0,
+      maxOp: 0.15 + Math.random() * 0.2,
+      life: Math.random()
+    });
+
+  }
+
+
+  function draw() {
+
+    ctx.clearRect(0, 0, W, H);
+
+
+    // Grid
+    ctx.strokeStyle = 'rgba(59,130,246,0.025)';
+    ctx.lineWidth = 1;
+
+    for (let x = 0; x < W; x += 80) {
+
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, H);
+      ctx.stroke();
+
+    }
+
+    for (let y = 0; y < H; y += 80) {
+
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(W, y);
+      ctx.stroke();
+
+    }
+
+
+    // Film strips
+    filmStrips.forEach(fs => {
+
+      fs.y -= fs.speed;
+
+      if (fs.y < -20) {
+        fs.y = H + 20;
+      }
+
+      ctx.fillStyle = `rgba(59,130,246,${fs.opacity})`;
+
+      for (let x = 0; x < W; x += fs.width + 16) {
+
+        ctx.fillRect(x, fs.y, fs.width, 8);
+
+        ctx.clearRect(x + 4, fs.y + 1, 10, 6);
+
+        ctx.clearRect(
+          x + fs.width - 14,
+          fs.y + 1,
+          10,
+          6
+        );
+
+      }
+
+    });
+
+
+    // Floating keyframes
+    nodes.forEach(n => {
+
+      n.x += n.vx;
+      n.y += n.vy;
+
+      if (n.x < 0 || n.x > W) n.vx *= -1;
+      if (n.y < 0 || n.y > H) n.vy *= -1;
 
       ctx.beginPath();
 
       ctx.arc(
-        p.x,
-        p.y,
-        p.size,
+        n.x,
+        n.y,
+        n.r,
         0,
         Math.PI * 2
       );
 
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
+      ctx.fillStyle = n.color + n.opacity + ')';
 
       ctx.fill();
 
+
+      // Diamond
+      ctx.save();
+
+      ctx.translate(
+        n.x + n.r * 3,
+        n.y
+      );
+
+      ctx.rotate(Math.PI / 4);
+
+      ctx.fillStyle =
+        n.color +
+        (n.opacity * 0.7) +
+        ')';
+
+      ctx.fillRect(-3, -3, 6, 6);
+
+      ctx.restore();
+
     });
 
-    requestAnimationFrame(animateParticles);
+
+    // Connections
+    for (let i = 0; i < nodes.length; i++) {
+
+      for (let j = i + 1; j < nodes.length; j++) {
+
+        const dx =
+          nodes[i].x - nodes[j].x;
+
+        const dy =
+          nodes[i].y - nodes[j].y;
+
+        const dist =
+          Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 200) {
+
+          const op =
+            (1 - dist / 200) * 0.04;
+
+          ctx.beginPath();
+
+          ctx.moveTo(
+            nodes[i].x,
+            nodes[i].y
+          );
+
+          ctx.lineTo(
+            nodes[j].x,
+            nodes[j].y
+          );
+
+          ctx.strokeStyle =
+            `rgba(59,130,246,${op})`;
+
+          ctx.lineWidth = 1;
+
+          ctx.stroke();
+
+        }
+
+      }
+
+    }
+
+
+    // Particles
+    particles.forEach(p => {
+
+      p.y += p.vy;
+      p.x += p.vx;
+
+      p.life += 0.004;
+
+      p.opacity =
+        Math.sin(p.life * Math.PI) *
+        p.maxOp;
+
+      if (p.life >= 1) {
+
+        p.life = 0;
+        p.x = Math.random() * W;
+        p.y = H + 10;
+
+      }
+
+      ctx.fillStyle =
+        `rgba(139,92,246,${Math.max(0, p.opacity)})`;
+
+      ctx.fillRect(
+        p.x,
+        p.y,
+        p.size,
+        p.size
+      );
+
+    });
+
+
+    // Waveform
+    const wfY = H - 30;
+
+    ctx.strokeStyle =
+      'rgba(6,182,212,0.06)';
+
+    ctx.lineWidth = 1.5;
+
+    ctx.beginPath();
+
+    for (let x = 0; x < W; x += 4) {
+
+      const amp =
+        12 *
+        Math.sin(
+          x * 0.05 +
+          Date.now() * 0.001
+        );
+
+      if (x === 0) {
+
+        ctx.moveTo(
+          x,
+          wfY + amp
+        );
+
+      } else {
+
+        ctx.lineTo(
+          x,
+          wfY + amp
+        );
+
+      }
+
+    }
+
+    ctx.stroke();
+
+    requestAnimationFrame(draw);
 
   }
 
-  animateParticles();
+  draw();
 
-}
+})();
 
 
 // ============================================================
 // TICKER
 // ============================================================
 
-const ticker = document.querySelector('.ticker-track');
+const tickerItems = [
 
-if (ticker) {
+  'Video Editing',
+  'Color Grading',
+  'Motion Graphics',
+  'Sound Design',
+  'Wedding Films',
+  'YouTube Content',
+  'Commercial Ads',
+  'Instagram Reels',
+  'Corporate Videos',
+  'After Effects',
+  'DaVinci Resolve',
+  'Adobe Premiere',
+  'Cinematic Cuts',
+  '4K Exports',
+  'Fast Delivery',
+  'Client Satisfaction'
 
-  ticker.innerHTML += ticker.innerHTML;
+];
 
-}
+
+(function buildTicker() {
+
+  const track =
+    document.getElementById('tickerTrack');
+
+  if (!track) return;
+
+  const doubled = [
+    ...tickerItems,
+    ...tickerItems,
+    ...tickerItems,
+    ...tickerItems
+  ];
+
+  track.innerHTML =
+    doubled.map(t => `
+
+      <span class="ticker-item">
+
+        ${t}
+
+        <span class="ticker-dot">
+          ◆
+        </span>
+
+      </span>
+
+    `).join('');
+
+})();
 
 
 // ============================================================
 // NAVBAR SCROLL
 // ============================================================
 
-const navbar = document.querySelector('nav');
+const navbar =
+  document.getElementById('navbar');
 
-window.addEventListener('scroll', () => {
+if (navbar) {
 
-  if (!navbar) return;
+  window.addEventListener('scroll', () => {
 
-  if (window.scrollY > 50) {
+    navbar.classList.toggle(
+      'scrolled',
+      window.scrollY > 60
+    );
 
-    navbar.classList.add('scrolled');
+  }, { passive: true });
 
-  } else {
-
-    navbar.classList.remove('scrolled');
-
-  }
-
-});
+}
 
 
 // ============================================================
 // MOBILE MENU
 // ============================================================
 
-const menuBtn =
-  document.querySelector('.menu-btn');
+const navToggle =
+  document.getElementById('navToggle');
 
-const navLinks =
-  document.querySelector('.nav-links');
+const mobileMenu =
+  document.getElementById('mobileMenu');
 
-if (menuBtn && navLinks) {
+const mobileClose =
+  document.getElementById('mobileClose');
 
-  menuBtn.addEventListener('click', () => {
 
-    navLinks.classList.toggle('active');
+if (navToggle && mobileMenu) {
 
-  });
+  navToggle.addEventListener(
+    'click',
+    () => {
+      mobileMenu.classList.add('open');
+    }
+  );
+
+}
+
+
+if (mobileClose && mobileMenu) {
+
+  mobileClose.addEventListener(
+    'click',
+    () => {
+      mobileMenu.classList.remove('open');
+    }
+  );
+
+}
+
+
+function closeMobile() {
+
+  if (mobileMenu) {
+
+    mobileMenu.classList.remove('open');
+
+  }
 
 }
 
@@ -166,242 +450,279 @@ if (menuBtn && navLinks) {
 // SCROLL REVEAL
 // ============================================================
 
-const revealElements =
-  document.querySelectorAll('.rev');
+const revObs =
+  new IntersectionObserver(
+    entries => {
 
-let revObs = null;
+      entries.forEach(e => {
 
-if ('IntersectionObserver' in window) {
+        if (e.isIntersecting) {
 
-  revObs = new IntersectionObserver(
-
-    (entries) => {
-
-      entries.forEach((entry) => {
-
-        if (entry.isIntersecting) {
-
-          entry.target.classList.add('visible');
-
-          revObs.unobserve(entry.target);
+          e.target.classList.add('vis');
 
         }
 
       });
 
     },
-
     {
-      threshold: 0.12
+      threshold: 0.08
     }
-
   );
 
-  revealElements.forEach((el) => {
+
+document
+  .querySelectorAll('.rev')
+  .forEach(el => {
 
     revObs.observe(el);
 
   });
-
-}
 
 
 // ============================================================
 // SKILL RINGS
 // ============================================================
 
-const skillRings =
-  document.querySelectorAll('.skill-ring');
+const skillObs =
+  new IntersectionObserver(
+    entries => {
 
-skillRings.forEach((ring) => {
+      entries.forEach(e => {
 
-  const value =
-    ring.dataset.value || 0;
+        if (e.isIntersecting) {
 
-  ring.style.setProperty(
-    '--progress',
-    value + '%'
+          e.target
+            .querySelectorAll('.sk-fill')
+            .forEach(ring => {
+
+              const target =
+                parseInt(
+                  ring.getAttribute(
+                    'data-offset'
+                  )
+                );
+
+              setTimeout(() => {
+
+                ring.style.strokeDashoffset =
+                  target;
+
+              }, 100);
+
+            });
+
+        }
+
+      });
+
+    },
+    {
+      threshold: 0.2
+    }
   );
 
-});
+
+document
+  .querySelectorAll('.sk-card')
+  .forEach(c => {
+
+    skillObs.observe(c);
+
+  });
 
 
 // ============================================================
 // PLAYHEAD ANIMATION
 // ============================================================
 
-const playheads =
-  document.querySelectorAll('.playhead');
+const ph =
+  document.getElementById('playhead');
 
-playheads.forEach((playhead) => {
+if (ph) {
 
-  playhead.style.animation =
-    'playheadMove 3s linear infinite';
+  let pos = 5;
+  let dir = 1;
 
-});
+  setInterval(() => {
+
+    pos += dir * 0.5;
+
+    if (pos > 92 || pos < 5) {
+
+      dir *= -1;
+
+    }
+
+    ph.style.left =
+      pos + '%';
+
+  }, 50);
+
+}
 
 
 // ============================================================
 // WAVEFORM CLIPS
 // ============================================================
 
-const waveformClips =
-  document.querySelectorAll('.waveform');
+const wfc =
+  document.getElementById('wf-clips');
 
-waveformClips.forEach((wave) => {
+if (wfc) {
 
-  wave.style.animation =
-    'waveMove 2s ease-in-out infinite';
+  const heights = [
 
-});
+    6,10,14,8,12,16,10,8,
+    14,12,6,10,14,8,12,16,
+    10,8,14,12,6,10,14,8,
+    12,16,10,8,14,12,6,10,
+    14,8,12,16,10,8
 
+  ];
+
+  wfc.innerHTML =
+    heights.map(h => `
+
+      <span
+        style="
+          display:inline-block;
+          width:2px;
+          height:${h}px;
+          background:rgba(6,182,212,.7);
+          margin:0 .5px;
+          border-radius:1px;
+          vertical-align:middle;
+        "
+      ></span>
+
+    `).join('');
+
+}
 
 // ============================================================
-// GALLERY DATA
+// GALLERY
 // ============================================================
 
 const galleryData = [
-
   {
     cat: 'commercial',
     title: 'Bike Edit 1',
     video: 'videos/Bike1.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'commercial',
     title: 'Bike Edit 2',
     video: 'videos/Bike2.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'commercial',
     title: 'Car Edit',
     video: 'videos/Car Edit.mp4.mp4',
     h: 220
   },
-
   {
     cat: 'wedding',
     title: 'Engagement Video',
     video: 'videos/Engagement.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'commercial',
     title: 'Frams Edit',
     video: 'videos/Frams Edit.mp4 (1).mp4',
     h: 180
   },
-
   {
     cat: 'instagram',
     title: 'IV Edit',
     video: 'videos/IV edit.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'IV Edit 1',
     video: 'videos/IV1.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'wedding',
     title: 'Invitation Video',
     video: 'videos/Invitation.mp4 (1).mp4',
     h: 220
   },
-
   {
     cat: 'motion',
     title: 'Murugan Edit',
     video: 'videos/Murugan.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'Nanban Edit',
     video: 'videos/Nanban.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'Reels Edit',
     video: 'videos/Reels.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'Reels Edit 1',
     video: 'videos/Reels1.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'wedding',
     title: 'Save The Date',
     video: 'videos/Save the date (1).mp4',
     h: 220
   },
-
   {
     cat: 'corporate',
     title: 'Sriet Video',
     video: 'videos/Sriet.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'corporate',
     title: 'Staff Video',
     video: 'videos/Staffs.mp4 (1).mp4',
     h: 200
   },
-
   {
     cat: 'instagram',
     title: 'Thala Edit',
     video: 'videos/Thala.mp4.mp4',
     h: 200
   },
-
   {
     cat: 'commercial',
     title: 'WOne-Ten',
     video: 'videos/WOne-Ten .mp4',
     h: 200
   }
-
 ];
 
 
 // ============================================================
-// GRADIENT BACKGROUNDS
+// GRADIENT FALLBACKS
 // ============================================================
 
 const grads = [
-
-  'linear-gradient(135deg,#0f172a,#1e3a8a)',
-
-  'linear-gradient(135deg,#111827,#312e81)',
-
-  'linear-gradient(135deg,#172554,#0f766e)',
-
-  'linear-gradient(135deg,#1e1b4b,#581c87)',
-
-  'linear-gradient(135deg,#111827,#164e63)',
-
-  'linear-gradient(135deg,#172554,#1e40af)'
-
+  'linear-gradient(135deg,#0f2027,#203a43)',
+  'linear-gradient(135deg,#1a1a2e,#0f3460)',
+  'linear-gradient(135deg,#200122,#6f0000)',
+  'linear-gradient(135deg,#0a3d0a,#145214)',
+  'linear-gradient(135deg,#2d1b69,#5b21b6)',
+  'linear-gradient(135deg,#0f0c29,#302b63)',
+  'linear-gradient(135deg,#1c1c1c,#3a3a3a)',
+  'linear-gradient(135deg,#0d1117,#1a2332)'
 ];
 
 
@@ -409,357 +730,80 @@ const grads = [
 // FILTER TABS
 // ============================================================
 
-const filterTabs =
-  document.getElementById('filterTabs');
+const cats = [
+  'all',
+  'wedding',
+  'corporate',
+  'youtube',
+  'commercial',
+  'instagram',
+  'travel',
+  'music',
+  'motion'
+];
 
-if (filterTabs) {
+const filterDiv = document.getElementById('filterTabs');
 
-  const filters = [
+if (filterDiv) {
 
-    {
-      name: 'All',
-      value: 'all'
-    },
+  filterDiv.innerHTML = '';
 
-    {
-      name: 'Instagram',
-      value: 'instagram'
-    },
+  cats.forEach(category => {
 
-    {
-      name: 'Commercial',
-      value: 'commercial'
-    },
-
-    {
-      name: 'Wedding',
-      value: 'wedding'
-    },
-
-    {
-      name: 'Motion',
-      value: 'motion'
-    },
-
-    {
-      name: 'Corporate',
-      value: 'corporate'
-    }
-
-  ];
-
-  filters.forEach((filter, index) => {
-
-    const button =
-      document.createElement('button');
+    const button = document.createElement('button');
 
     button.className =
-      'filter-btn' +
-      (index === 0 ? ' active' : '');
+      'ftab' + (category === 'all' ? ' act' : '');
+
+    button.dataset.filter = category;
 
     button.textContent =
-      filter.name;
+      category === 'all'
+        ? 'All'
+        : category.charAt(0).toUpperCase() +
+          category.slice(1);
 
-    button.dataset.filter =
-      filter.value;
+    filterDiv.appendChild(button);
 
-    filterTabs.appendChild(button);
 
     button.addEventListener('click', () => {
 
       document
-        .querySelectorAll('.filter-btn')
-        .forEach((btn) => {
-
-          btn.classList.remove('active');
-
+        .querySelectorAll('.ftab')
+        .forEach(tab => {
+          tab.classList.remove('act');
         });
 
-      button.classList.add('active');
+      button.classList.add('act');
 
-      const cards =
-        document.querySelectorAll('.mi');
 
-      cards.forEach((card) => {
+      document
+        .querySelectorAll('.mi')
+        .forEach(card => {
 
-        const category =
-          card.dataset.cat;
+          const show =
+            category === 'all' ||
+            card.dataset.cat === category;
 
-        if (
-          filter.value === 'all' ||
-          category === filter.value
-        ) {
+          if (show) {
 
-          card.style.display = '';
+            card.style.opacity = '1';
+            card.style.transform = '';
+            card.style.pointerEvents = 'auto';
 
-        } else {
+          } else {
 
-          card.style.display = 'none';
+            card.style.opacity = '0.15';
+            card.style.transform = 'scale(.94)';
+            card.style.pointerEvents = 'none';
 
-        }
+          }
 
-      });
+        });
 
     });
 
   });
-
-}
-
-
-// ============================================================
-// GLASS VIDEO MODAL
-// ============================================================
-
-function openVideoModal(
-  videoSrc,
-  title,
-  category
-) {
-
-  // Remove old popup if one exists
-
-  const oldModal =
-    document.getElementById('videoModal');
-
-  if (oldModal) {
-
-    oldModal.remove();
-
-  }
-
-
-  // Create popup
-
-  const modal =
-    document.createElement('div');
-
-  modal.id = 'videoModal';
-
-  modal.className =
-    'video-modal';
-
-
-  // Popup HTML
-
-  modal.innerHTML = `
-
-    <div class="video-modal-backdrop"></div>
-
-    <div class="video-modal-box">
-
-      <button
-        class="video-modal-close"
-        aria-label="Close video"
-      >
-        ×
-      </button>
-
-
-      <div class="video-modal-header">
-
-        <div>
-
-          <div class="video-modal-category">
-            ${category}
-          </div>
-
-          <div class="video-modal-title">
-            ${title}
-          </div>
-
-        </div>
-
-
-        <div class="video-modal-status">
-          ● NOW PLAYING
-        </div>
-
-      </div>
-
-
-      <div class="video-modal-player">
-
-        <video
-          class="video-modal-video"
-          src="${videoSrc}"
-          controls
-          autoplay
-          playsinline
-          preload="auto"
-        ></video>
-
-      </div>
-
-
-      <div class="video-modal-footer">
-
-        <span>
-          🎬 SID VISUALS
-        </span>
-
-        <span>
-          ESC to close
-        </span>
-
-      </div>
-
-    </div>
-
-  `;
-
-
-  // Add popup to page
-
-  document.body.appendChild(modal);
-
-
-  // Stop background scrolling
-
-  document.body.classList.add(
-    'modal-open'
-  );
-
-
-  // Trigger animation
-
-  requestAnimationFrame(() => {
-
-    modal.classList.add('active');
-
-  });
-
-
-  // Get elements
-
-  const modalVideo =
-    modal.querySelector(
-      '.video-modal-video'
-    );
-
-  const closeButton =
-    modal.querySelector(
-      '.video-modal-close'
-    );
-
-  const backdrop =
-    modal.querySelector(
-      '.video-modal-backdrop'
-    );
-
-  const modalBox =
-    modal.querySelector(
-      '.video-modal-box'
-    );
-
-
-  // Close function
-
-  function closeVideoModal() {
-
-    modal.classList.remove('active');
-
-    document.body.classList.remove(
-      'modal-open'
-    );
-
-
-    if (modalVideo) {
-
-      modalVideo.pause();
-
-      modalVideo.currentTime = 0;
-
-    }
-
-
-    setTimeout(() => {
-
-      if (modal.parentNode) {
-
-        modal.remove();
-
-      }
-
-    }, 350);
-
-  }
-
-
-  // Close button
-
-  closeButton.addEventListener(
-    'click',
-    closeVideoModal
-  );
-
-
-  // Click outside popup
-
-  backdrop.addEventListener(
-    'click',
-    closeVideoModal
-  );
-
-
-  // Prevent popup click from closing
-
-  modalBox.addEventListener(
-    'click',
-    (event) => {
-
-      event.stopPropagation();
-
-    }
-  );
-
-
-  // ESC key
-
-  function escapeHandler(event) {
-
-    if (event.key === 'Escape') {
-
-      closeVideoModal();
-
-      document.removeEventListener(
-        'keydown',
-        escapeHandler
-      );
-
-    }
-
-  }
-
-
-  document.addEventListener(
-    'keydown',
-    escapeHandler
-  );
-
-
-  // Try autoplay
-
-  if (modalVideo) {
-
-    const playPromise =
-      modalVideo.play();
-
-    if (
-      playPromise !== undefined
-    ) {
-
-      playPromise.catch(() => {
-
-        console.log(
-          '▶️ Click play button to start video.'
-        );
-
-      });
-
-    }
-
-  }
 
 }
 
@@ -769,372 +813,403 @@ function openVideoModal(
 // ============================================================
 
 const grid =
-  document.getElementById(
-    'galleryGrid'
-  );
-
+  document.getElementById('galleryGrid');
 
 if (grid) {
 
-  // Clear old gallery
-
   grid.innerHTML = '';
 
+  galleryData.forEach((item, index) => {
 
-  // Create every gallery card
+    const card =
+      document.createElement('div');
 
-  galleryData.forEach(
-    (item, index) => {
+    card.className = 'mi rev';
 
-      const card =
-        document.createElement('div');
-
-
-      card.className =
-        'mi rev';
+    card.dataset.cat = item.cat;
 
 
-      card.dataset.cat =
-        item.cat;
+    card.innerHTML = `
 
+      <div
+        class="mi-thumb"
+        style="
+          height:${item.h}px;
+          position:relative;
+          overflow:hidden;
+          background:${grads[index % grads.length]};
+        "
+      >
 
-      // Card HTML
+        <video
+          class="portfolio-video"
+          src="${item.video}"
+          muted
+          playsinline
+          preload="metadata"
+          style="
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            display:block;
+            cursor:pointer;
+          "
+        ></video>
 
-      card.innerHTML = `
 
         <div
-          class="mi-thumb"
+          class="mi-play"
           style="
-            height:${item.h}px;
-            position:relative;
-            overflow:hidden;
-            background:${grads[index % grads.length]};
+            pointer-events:none;
           "
         >
-
-          <video
-            class="portfolio-video"
-            src="${item.video}"
-            muted
-            playsinline
-            preload="metadata"
-          ></video>
+          ▶
+        </div>
 
 
-          <div
-            class="mi-play"
-            style="
-              pointer-events:none;
-            "
-          >
-            ▶
+        <div class="mi-overlay">
+
+          <div class="mi-cat">
+            ${item.cat}
           </div>
 
-
-          <div class="mi-overlay">
-
-            <div class="mi-cat">
-              ${item.cat}
-            </div>
-
-            <div class="mi-title">
-              ${item.title}
-            </div>
-
+          <div class="mi-title">
+            ${item.title}
           </div>
 
         </div>
 
-      `;
+      </div>
+
+    `;
 
 
-      // Add card to gallery
-
-      grid.appendChild(card);
+    grid.appendChild(card);
 
 
-      // Scroll reveal observer
-
-      if (
-        typeof revObs !==
-        'undefined' &&
-        revObs
-      ) {
-
-        revObs.observe(card);
-
-      }
+    // Scroll reveal
+    if (typeof revObs !== 'undefined') {
+      revObs.observe(card);
+    }
 
 
-      // Get card video
+    const video =
+      card.querySelector('.portfolio-video');
 
-      const video =
-        card.querySelector(
-          '.portfolio-video'
-        );
+    const playButton =
+      card.querySelector('.mi-play');
 
 
-      // Load first frame
+    // ========================================================
+    // SHOW FIRST FRAME AS THUMBNAIL
+    // ========================================================
 
-      video.addEventListener(
-        'loadedmetadata',
-        () => {
+    video.addEventListener('loadedmetadata', () => {
 
-          try {
+      // Move to first frame
+      video.currentTime = 0;
 
-            video.currentTime = 0;
+    });
 
-          } catch (error) {
 
-            console.log(
-              'Could not set first frame:',
+    video.addEventListener('seeked', () => {
+
+      // Keep video paused after creating thumbnail
+      video.pause();
+
+    });
+
+
+    // ========================================================
+    // CLICK TO PLAY / PAUSE
+    // ========================================================
+
+    card.addEventListener('click', () => {
+
+      if (video.paused) {
+
+        video.play()
+          .then(() => {
+
+            playButton.style.opacity = '0';
+
+          })
+          .catch(error => {
+
+            console.error(
+              'Could not play video:',
+              item.video,
               error
             );
 
-          }
+          });
 
-        }
+      } else {
+
+        video.pause();
+
+        playButton.style.opacity = '1';
+
+      }
+
+    });
+
+
+    // ========================================================
+    // WHEN VIDEO ENDS
+    // ========================================================
+
+    video.addEventListener('ended', () => {
+
+      playButton.style.opacity = '1';
+
+      video.currentTime = 0;
+
+    });
+
+
+    // ========================================================
+    // VIDEO ERROR
+    // ========================================================
+
+    video.addEventListener('error', () => {
+
+      console.error(
+        '❌ Video could not load:',
+        item.video
       );
 
-
-      // Make sure card video NEVER plays
-
-      video.addEventListener(
-        'play',
-        () => {
-
-          video.pause();
-
-        }
-      );
+    });
 
 
-      // Pause after seeking
+    // ========================================================
+    // 3D TILT
+    // ========================================================
 
-      video.addEventListener(
-        'seeked',
-        () => {
+    card.addEventListener('mousemove', e => {
 
-          video.pause();
+      const rect =
+        card.getBoundingClientRect();
 
-        }
-      );
+      const cx =
+        rect.left + rect.width / 2;
 
+      const cy =
+        rect.top + rect.height / 2;
 
-      // ======================================================
-      // CARD CLICK → OPEN POPUP
-      // ======================================================
+      const rx =
+        ((e.clientY - cy) /
+          rect.height) * 12;
 
-      card.addEventListener(
-        'click',
-        (event) => {
+      const ry =
+        -((e.clientX - cx) /
+          rect.width) * 12;
 
-          event.preventDefault();
+      card.style.transform =
+        `perspective(800px)
+         rotateX(${rx}deg)
+         rotateY(${ry}deg)
+         translateY(-6px)`;
 
-          event.stopPropagation();
+      card.style.animationPlayState =
+        'paused';
 
-
-          console.log(
-            '🎬 OPENING VIDEO POPUP:',
-            item.title
-          );
-
-
-          openVideoModal(
-            item.video,
-            item.title,
-            item.cat
-          );
-
-        }
-      );
+    });
 
 
-      // Video loading error
+    card.addEventListener('mouseleave', () => {
 
-      video.addEventListener(
-        'error',
-        () => {
+      card.style.transform = '';
 
-          console.error(
-            '❌ Video could not load:',
-            item.video
-          );
+      card.style.animationPlayState =
+        'running';
 
-        }
-      );
+    });
 
-
-      // ======================================================
-      // 3D CARD EFFECT
-      // ======================================================
-
-      card.addEventListener(
-        'mousemove',
-        (event) => {
-
-          const rect =
-            card.getBoundingClientRect();
-
-
-          const centerX =
-            rect.left +
-            rect.width / 2;
-
-
-          const centerY =
-            rect.top +
-            rect.height / 2;
-
-
-          const rotateX =
-            ((event.clientY - centerY) /
-              rect.height) *
-            12;
-
-
-          const rotateY =
-            -((event.clientX - centerX) /
-              rect.width) *
-            12;
-
-
-          card.style.transform =
-            `
-              perspective(800px)
-              rotateX(${rotateX}deg)
-              rotateY(${rotateY}deg)
-              translateY(-6px)
-            `;
-
-
-          card.style.animationPlayState =
-            'paused';
-
-        }
-      );
-
-
-      card.addEventListener(
-        'mouseleave',
-        () => {
-
-          card.style.transform = '';
-
-          card.style.animationPlayState =
-            'running';
-
-        }
-      );
-
-    }
-  );
+  });
 
 }
 
+
+console.log(
+  '🎬 Gallery loaded:',
+  galleryData.length,
+  'videos'
+);
 
 // ============================================================
 // CONTACT FORM
 // ============================================================
 
-const contactForm =
-  document.getElementById(
-    'contactForm'
+async function submitContact(event) {
+
+  console.log(
+    'Submit button clicked!'
   );
 
 
-if (contactForm) {
-
-  contactForm.addEventListener(
-    'submit',
-    async (event) => {
-
-      event.preventDefault();
+  event.preventDefault();
 
 
-      const formData =
-        new FormData(contactForm);
+  const btn =
+    event.target.querySelector(
+      'button[type="submit"]'
+    );
 
 
-      const data = {
-
-        name:
-          formData.get('name'),
-
-        email:
-          formData.get('email'),
-
-        phone:
-          formData.get('phone'),
-
-        message:
-          formData.get('message')
-
-      };
+  if (!btn) return;
 
 
-      try {
-
-        const response =
-          await fetch(
-            '/api/contact',
-            {
-
-              method: 'POST',
-
-              headers: {
-                'Content-Type':
-                  'application/json'
-              },
-
-              body:
-                JSON.stringify(data)
-
-            }
-          );
+  const originalText =
+    btn.innerHTML;
 
 
-        const result =
-          await response.json();
+  btn.disabled = true;
+
+  btn.innerHTML =
+    'Sending...';
 
 
-        console.log(
-          'Contact response:',
-          result
-        );
+  const name =
+    document
+      .getElementById('name')
+      .value
+      .trim();
 
 
-        if (response.ok) {
+  const email =
+    document
+      .getElementById('email')
+      .value
+      .trim();
 
-          alert(
-            'Message sent successfully!'
-          );
 
-          contactForm.reset();
+  const phone =
+    document
+      .getElementById('phone')
+      .value
+      .trim();
 
-        } else {
 
-          alert(
-            'Something went wrong. Please try again.'
-          );
+  const projectType =
+    document
+      .getElementById('projectType')
+      .value;
+
+
+  const budget =
+    document
+      .getElementById('budget')
+      .value;
+
+
+  const message =
+    document
+      .getElementById('message')
+      .value
+      .trim();
+
+
+  try {
+
+    const response =
+      await fetch(
+        'https://siddharth-portfolio-o283.onrender.com/api/contact',
+        {
+          method: 'POST',
+
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+
+          body: JSON.stringify({
+
+            name,
+            email,
+            phone,
+            projectType,
+            budget,
+            message
+
+          })
 
         }
+      );
 
-      } catch (error) {
 
-        console.error(
-          'Contact form error:',
-          error
-        );
+    const data =
+      await response.json();
 
-        alert(
-          'Unable to send message right now.'
-        );
 
-      }
+    if (
+      response.ok &&
+      data.success
+    ) {
+
+      btn.innerHTML =
+        '✓ Sent!';
+
+
+      btn.style.background =
+        'linear-gradient(135deg,#10b981,#06B6D4)';
+
+
+      alert(
+        '✅ Thank you! Your inquiry has been sent successfully.'
+      );
+
+
+      document
+        .getElementById('contactForm')
+        .reset();
+
+
+    } else {
+
+      alert(
+        data.message ||
+        '❌ Failed to send inquiry.'
+      );
+
+
+      btn.innerHTML =
+        originalText;
 
     }
-  );
+
+
+  } catch (error) {
+
+    console.error(
+      'Error:',
+      error
+    );
+
+
+    alert(
+      '❌ Unable to connect to the server.'
+    );
+
+
+    btn.innerHTML =
+      originalText;
+
+  }
+
+
+  btn.disabled = false;
+
+
+  setTimeout(() => {
+
+    btn.innerHTML =
+      originalText;
+
+    btn.style.background =
+      '';
+
+  }, 3000);
 
 }
 
@@ -1143,46 +1218,54 @@ if (contactForm) {
 // REVIEW FORM
 // ============================================================
 
-const reviewForm =
-  document.getElementById(
-    'reviewForm'
-  );
+function submitReview(event) {
+
+  event.preventDefault();
 
 
-if (reviewForm) {
+  const btn =
+    event.target.querySelector(
+      'button[type="submit"]'
+    );
 
-  reviewForm.addEventListener(
-    'submit',
-    (event) => {
 
-      event.preventDefault();
+  if (!btn) return;
 
-      console.log(
-        'Review submitted'
-      );
 
-      alert(
-        'Thank you for your review!'
-      );
+  const originalText =
+    btn.innerHTML;
 
-      reviewForm.reset();
 
-    }
-  );
+  btn.innerHTML =
+    '✓ Review Submitted!';
+
+
+  btn.style.background =
+    'linear-gradient(135deg,#10b981,#06B6D4)';
+
+
+  setTimeout(() => {
+
+    btn.innerHTML =
+      originalText;
+
+    btn.style.background =
+      '';
+
+  }, 3000);
 
 }
 
 
 // ============================================================
-// FINAL LOG
+// FINAL CHECK
 // ============================================================
 
 console.log(
-  '🎬 SID VISUALS portfolio loaded successfully.'
+  '✅ SID VISUALS JavaScript Loaded Successfully'
 );
 
 console.log(
-  '🎬 Gallery loaded:',
-  galleryData.length,
-  'videos'
+  '🎬 Gallery videos:',
+  galleryData.length
 );
