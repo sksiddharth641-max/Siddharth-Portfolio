@@ -919,13 +919,21 @@ if (grid) {
 
     });
 
-
-   // ========================================================
-// CLICK → OPEN GLASS VIDEO POPUP
+// ========================================================
+// CLICK → OPEN VIDEO POPUP
 // ========================================================
 
-card.addEventListener('click', () => {
-  openVideoModal(item.video, item.title, item.cat);
+card.addEventListener('click', function (event) {
+console.log('POPUP CLICK:', item.title);
+  event.preventDefault();
+  event.stopPropagation();
+
+  openVideoModal(
+    item.video,
+    item.title,
+    item.cat
+  );
+
 });
 
     // ========================================================
