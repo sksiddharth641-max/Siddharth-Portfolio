@@ -811,7 +811,78 @@ if (filterDiv) {
 // ============================================================
 // BUILD GALLERY
 // ============================================================
+function openVideoModal(videoSrc, title, category) {
+  const oldModal = document.getElementById('videoModal');
+  if (oldModal) oldModal.remove();
 
+  const modal = document.createElement('div');
+  modal.id = 'videoModal';
+  modal.className = 'video-modal';
+
+  modal.innerHTML = `
+    <div class="video-modal-backdrop"></div>
+
+    <div class="video-modal-box">
+      <button class="video-modal-close" type="button">×</button>
+
+      <div class="video-modal-header">
+        <div>
+          <div class="video-modal-category">${category}</div>
+          <div class="video-modal-title">${title}</div>
+        </div>
+      </div>
+
+      <div class="video-modal-player">
+        <video
+          class="video-modal-video"
+          src="${videoSrc}"
+          controls
+          playsinline
+          preload="auto"
+        ></video>
+      </div>
+
+      <div class="video-modal-footer">
+        <span>SID VISUALS</span>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+  document.body.classList.add('modal-open');
+
+  requestAnimationFrame(() => {
+    modal.classList.add('active');
+  });
+
+  const popupVideo = modal.querySelector('.video-modal-video');
+
+  setTimeout(() => {
+    popupVideo.play().catch(() => {});
+  }, 300);
+
+  function closeModal() {
+    popupVideo.pause();
+    modal.classList.remove('active');
+    document.body.classList.remove('modal-open');
+
+    setTimeout(() => modal.remove(), 400);
+
+    document.removeEventListener('keydown', escapeHandler);
+  }
+
+  function escapeHandler(e) {
+    if (e.key === 'Escape') closeModal();
+  }
+
+  modal.querySelector('.video-modal-close')
+    .addEventListener('click', closeModal);
+
+  modal.querySelector('.video-modal-backdrop')
+    .addEventListener('click', closeModal);
+
+  document.addEventListener('keydown', escapeHandler);
+}
 const grid =
   document.getElementById('galleryGrid');
 
@@ -885,7 +956,23 @@ if (grid) {
 
 
     grid.appendChild(card);
+card.addEventListener('click', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
 
+  const video = card.querySelector('.portfolio-video');
+
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
+  }
+
+  openVideoModal(
+    card.dataset.video,
+    card.dataset.title,
+    card.dataset.category
+  );
+});
 
     // Scroll reveal
     if (typeof revObs !== 'undefined') {
