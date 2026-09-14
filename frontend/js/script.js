@@ -957,28 +957,6 @@ if (grid) {
 
     grid.appendChild(card);
     
-    grid.addEventListener('click', function (e) {
-  const card = e.target.closest('.mi');
-  if (!card) return;
-
-  const video = card.querySelector('.portfolio-video');
-  if (!video) return;
-
-  e.preventDefault();
-  e.stopPropagation();
-
-  // Stop thumbnail video
-  video.pause();
-  video.currentTime = 0;
-
-  // Get actual information directly from the card
-  const videoSrc = video.getAttribute('src');
-  const title = card.querySelector('.mi-title')?.textContent.trim() || 'Project';
-  const category = card.querySelector('.mi-cat')?.textContent.trim() || '';
-
-  openVideoModal(videoSrc, title, category);
-});
-
     // Scroll reveal
     if (typeof revObs !== 'undefined') {
       revObs.observe(card);
@@ -999,7 +977,7 @@ if (grid) {
     video.addEventListener('loadedmetadata', () => {
 
       // Move to first frame
-      video.currentTime = 0;
+      video.currentTime = 5;
 
     });
 
@@ -1011,40 +989,63 @@ if (grid) {
 
     });
 
+  });
 
+
+  // ========================================================
+  // OPEN VIDEO IN POPUP
+  // ========================================================
+
+  grid.addEventListener('click', function (e) {
+
+    const card = e.target.closest('.mi');
+
+    if (!card) return;
+
+    const video =
+      card.querySelector('.portfolio-video');
+
+    if (!video) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Stop thumbnail completely
+    video.pause();
+    video.muted = true;
+    video.currentTime = 0;
+
+    const videoSrc =
+      video.getAttribute('src');
+
+    const title =
+      card.querySelector('.mi-title')
+        ?.textContent.trim()
+        || 'Project';
+
+    const category =
+      card.querySelector('.mi-cat')
+        ?.textContent.trim()
+        || '';
+
+    console.log(
+      '🎬 POPUP:',
+      title,
+      videoSrc
+    );
+
+    openVideoModal(
+      videoSrc,
+      title,
+      category
+    );
+
+  });
+
+}
     // ========================================================
     // CLICK TO PLAY / PAUSE
     // ========================================================
-
-    card.addEventListener('click', () => {
-
-      if (video.paused) {
-
-        video.play()
-          .then(() => {
-
-            playButton.style.opacity = '0';
-
-          })
-          .catch(error => {
-
-            console.error(
-              'Could not play video:',
-              item.video,
-              error
-            );
-
-          });
-
-      } else {
-
-        video.pause();
-
-        playButton.style.opacity = '1';
-
-      }
-
-    });
 
 
     // ========================================================
