@@ -1,3 +1,4 @@
+```javascript
 // ============================================================
 // POINTER LIGHT
 // ============================================================
@@ -30,10 +31,8 @@ if (pl) {
   let particles = [];
 
   function resize() {
-
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
-
   }
 
   resize();
@@ -438,9 +437,7 @@ if (mobileClose && mobileMenu) {
 function closeMobile() {
 
   if (mobileMenu) {
-
     mobileMenu.classList.remove('open');
-
   }
 
 }
@@ -457,9 +454,7 @@ const revObs =
       entries.forEach(e => {
 
         if (e.isIntersecting) {
-
           e.target.classList.add('vis');
-
         }
 
       });
@@ -549,9 +544,7 @@ if (ph) {
     pos += dir * 0.5;
 
     if (pos > 92 || pos < 5) {
-
       dir *= -1;
-
     }
 
     ph.style.left =
@@ -600,113 +593,132 @@ if (wfc) {
 
 }
 
+
 // ============================================================
-// GALLERY
+// GALLERY DATA
 // ============================================================
 
 const galleryData = [
+
   {
     cat: 'commercial',
     title: 'Bike Edit 1',
     video: 'videos/Bike1.mp4 (1).mp4',
     h: 200
   },
+
   {
     cat: 'commercial',
     title: 'Bike Edit 2',
     video: 'videos/Bike2.mp4 (1).mp4',
     h: 200
   },
+
   {
     cat: 'commercial',
     title: 'Car Edit',
     video: 'videos/Car Edit.mp4.mp4',
     h: 220
   },
+
   {
     cat: 'wedding',
     title: 'Engagement Video',
     video: 'videos/Engagement.mp4 (1).mp4',
     h: 200
   },
+
   {
     cat: 'commercial',
     title: 'Frams Edit',
     video: 'videos/Frams Edit.mp4 (1).mp4',
     h: 180
   },
+
   {
     cat: 'instagram',
     title: 'IV Edit',
     video: 'videos/IV edit.mp4 (1).mp4',
     h: 200
   },
+
   {
     cat: 'instagram',
     title: 'IV Edit 1',
     video: 'videos/IV1.mp4.mp4',
     h: 200
   },
+
   {
     cat: 'wedding',
     title: 'Invitation Video',
     video: 'videos/Invitation.mp4 (1).mp4',
     h: 220
   },
+
   {
     cat: 'motion',
     title: 'Murugan Edit',
     video: 'videos/Murugan.mp4 (1).mp4',
     h: 200
   },
+
   {
     cat: 'instagram',
     title: 'Nanban Edit',
     video: 'videos/Nanban.mp4.mp4',
     h: 200
   },
+
   {
     cat: 'instagram',
     title: 'Reels Edit',
     video: 'videos/Reels.mp4.mp4',
     h: 200
   },
+
   {
     cat: 'instagram',
     title: 'Reels Edit 1',
     video: 'videos/Reels1.mp4.mp4',
     h: 200
   },
+
   {
     cat: 'wedding',
     title: 'Save The Date',
     video: 'videos/Save the date (1).mp4',
     h: 220
   },
+
   {
     cat: 'corporate',
     title: 'Sriet Video',
     video: 'videos/Sriet.mp4 (1).mp4',
     h: 200
   },
+
   {
     cat: 'corporate',
     title: 'Staff Video',
     video: 'videos/Staffs.mp4 (1).mp4',
     h: 200
   },
+
   {
     cat: 'instagram',
     title: 'Thala Edit',
     video: 'videos/Thala.mp4.mp4',
     h: 200
   },
+
   {
     cat: 'commercial',
     title: 'WOne-Ten',
     video: 'videos/WOne-Ten .mp4',
     h: 200
   }
+
 ];
 
 
@@ -715,6 +727,7 @@ const galleryData = [
 // ============================================================
 
 const grads = [
+
   'linear-gradient(135deg,#0f2027,#203a43)',
   'linear-gradient(135deg,#1a1a2e,#0f3460)',
   'linear-gradient(135deg,#200122,#6f0000)',
@@ -723,6 +736,7 @@ const grads = [
   'linear-gradient(135deg,#0f0c29,#302b63)',
   'linear-gradient(135deg,#1c1c1c,#3a3a3a)',
   'linear-gradient(135deg,#0d1117,#1a2332)'
+
 ];
 
 
@@ -731,6 +745,7 @@ const grads = [
 // ============================================================
 
 const cats = [
+
   'all',
   'wedding',
   'corporate',
@@ -740,9 +755,11 @@ const cats = [
   'travel',
   'music',
   'motion'
+
 ];
 
-const filterDiv = document.getElementById('filterTabs');
+const filterDiv =
+  document.getElementById('filterTabs');
 
 if (filterDiv) {
 
@@ -750,12 +767,15 @@ if (filterDiv) {
 
   cats.forEach(category => {
 
-    const button = document.createElement('button');
+    const button =
+      document.createElement('button');
 
     button.className =
-      'ftab' + (category === 'all' ? ' act' : '');
+      'ftab' +
+      (category === 'all' ? ' act' : '');
 
-    button.dataset.filter = category;
+    button.dataset.filter =
+      category;
 
     button.textContent =
       category === 'all'
@@ -809,95 +829,257 @@ if (filterDiv) {
 
 
 // ============================================================
-// BUILD GALLERY
+// VIDEO POPUP / MODAL
 // ============================================================
-function openVideoModal(videoSrc, title, category) {
-  const oldModal = document.getElementById('videoModal');
-  if (oldModal) oldModal.remove();
 
-  const modal = document.createElement('div');
-  modal.id = 'videoModal';
-  modal.className = 'video-modal';
+function openVideoModal(videoSrc, title, category) {
+
+  // Remove an existing popup first
+  const oldModal =
+    document.getElementById('videoModal');
+
+  if (oldModal) {
+    oldModal.remove();
+  }
+
+
+  // Create popup
+  const modal =
+    document.createElement('div');
+
+  modal.id =
+    'videoModal';
+
+  modal.className =
+    'video-modal';
+
 
   modal.innerHTML = `
+
     <div class="video-modal-backdrop"></div>
 
     <div class="video-modal-box">
-      <button class="video-modal-close" type="button">×</button>
+
+      <button
+        class="video-modal-close"
+        type="button"
+        aria-label="Close video"
+      >
+        ×
+      </button>
+
 
       <div class="video-modal-header">
+
         <div>
-          <div class="video-modal-category">${category}</div>
-          <div class="video-modal-title">${title}</div>
+
+          <div class="video-modal-category">
+            ${category}
+          </div>
+
+          <div class="video-modal-title">
+            ${title}
+          </div>
+
         </div>
+
       </div>
 
+
       <div class="video-modal-player">
+
         <video
           class="video-modal-video"
           src="${videoSrc}"
           controls
           playsinline
+          muted
           preload="auto"
         ></video>
+
       </div>
+
 
       <div class="video-modal-footer">
-        <span>SID VISUALS</span>
+
+        <span>
+          SID VISUALS
+        </span>
+
       </div>
+
     </div>
+
   `;
 
-  document.body.appendChild(modal);
-  document.body.classList.add('modal-open');
 
+  document.body.appendChild(modal);
+
+  document.body.classList.add(
+    'modal-open'
+  );
+
+
+  // Start animation
   requestAnimationFrame(() => {
+
     modal.classList.add('active');
+
   });
 
-  const popupVideo = modal.querySelector('.video-modal-video');
 
+  const popupVideo =
+    modal.querySelector(
+      '.video-modal-video'
+    );
+
+
+  // Make absolutely sure popup starts muted
+  popupVideo.muted = true;
+
+
+  // Play popup after animation
   setTimeout(() => {
-    popupVideo.play().catch(() => {});
-  }, 300);
+
+    if (!popupVideo) return;
+
+    popupVideo.muted = true;
+
+    popupVideo.play()
+      .catch(() => {});
+
+  }, 350);
+
+
+  // ==========================================================
+  // CLOSE POPUP
+  // ==========================================================
 
   function closeModal() {
-    popupVideo.pause();
-    modal.classList.remove('active');
-    document.body.classList.remove('modal-open');
 
-    setTimeout(() => modal.remove(), 400);
+    if (!modal) return;
 
-    document.removeEventListener('keydown', escapeHandler);
+    if (popupVideo) {
+
+      popupVideo.pause();
+      popupVideo.currentTime = 0;
+      popupVideo.removeAttribute('src');
+      popupVideo.load();
+
+    }
+
+
+    modal.classList.remove(
+      'active'
+    );
+
+    document.body.classList.remove(
+      'modal-open'
+    );
+
+
+    setTimeout(() => {
+
+      if (modal.parentNode) {
+        modal.remove();
+      }
+
+    }, 400);
+
+
+    document.removeEventListener(
+      'keydown',
+      escapeHandler
+    );
+
   }
+
+
+  // ==========================================================
+  // ESC KEY
+  // ==========================================================
 
   function escapeHandler(e) {
-    if (e.key === 'Escape') closeModal();
+
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+
   }
 
-  modal.querySelector('.video-modal-close')
-    .addEventListener('click', closeModal);
 
-  modal.querySelector('.video-modal-backdrop')
-    .addEventListener('click', closeModal);
+  // Close button
+  const closeButton =
+    modal.querySelector(
+      '.video-modal-close'
+    );
 
-  document.addEventListener('keydown', escapeHandler);
+  if (closeButton) {
+
+    closeButton.addEventListener(
+      'click',
+      closeModal
+    );
+
+  }
+
+
+  // Click outside video
+  const backdrop =
+    modal.querySelector(
+      '.video-modal-backdrop'
+    );
+
+  if (backdrop) {
+
+    backdrop.addEventListener(
+      'click',
+      closeModal
+    );
+
+  }
+
+
+  // Keyboard
+  document.addEventListener(
+    'keydown',
+    escapeHandler
+  );
+
 }
+
+
+// ============================================================
+// BUILD GALLERY
+// ============================================================
+
 const grid =
-  document.getElementById('galleryGrid');
+  document.getElementById(
+    'galleryGrid'
+  );
+
 
 if (grid) {
 
   grid.innerHTML = '';
 
+
+  // ==========================================================
+  // CREATE ALL PROJECT CARDS
+  // ==========================================================
+
   galleryData.forEach((item, index) => {
 
     const card =
-      document.createElement('div');
+      document.createElement(
+        'div'
+      );
 
-    card.className = 'mi rev';
+    card.className =
+      'mi rev';
 
-    card.dataset.cat = item.cat;
+    card.dataset.cat =
+      item.cat;
 
 
     card.innerHTML = `
@@ -918,12 +1100,15 @@ if (grid) {
           muted
           playsinline
           preload="metadata"
+          tabindex="-1"
+          aria-hidden="true"
           style="
             width:100%;
             height:100%;
             object-fit:cover;
             display:block;
             cursor:pointer;
+            pointer-events:none;
           "
         ></video>
 
@@ -956,169 +1141,235 @@ if (grid) {
 
 
     grid.appendChild(card);
-    
-    grid.addEventListener('click', function (e) {
-  const card = e.target.closest('.mi');
-  if (!card) return;
 
-  const video = card.querySelector('.portfolio-video');
-  if (!video) return;
-
-  e.preventDefault();
-  e.stopPropagation();
-
-  // Stop thumbnail video
-  video.pause();
-  video.currentTime = 0;
-
-  // Get actual information directly from the card
-  const videoSrc = video.getAttribute('src');
-  const title = card.querySelector('.mi-title')?.textContent.trim() || 'Project';
-  const category = card.querySelector('.mi-cat')?.textContent.trim() || '';
-
-  openVideoModal(videoSrc, title, category);
-});
 
     // Scroll reveal
-    if (typeof revObs !== 'undefined') {
+    if (
+      typeof revObs !== 'undefined' &&
+      revObs
+    ) {
+
       revObs.observe(card);
+
     }
 
 
     const video =
-      card.querySelector('.portfolio-video');
+      card.querySelector(
+        '.portfolio-video'
+      );
+
 
     const playButton =
-      card.querySelector('.mi-play');
+      card.querySelector(
+        '.mi-play'
+      );
 
 
     // ========================================================
-    // SHOW FIRST FRAME AS THUMBNAIL
+    // THUMBNAIL FIRST FRAME
     // ========================================================
 
-    video.addEventListener('loadedmetadata', () => {
-
-      // Move to first frame
-      video.currentTime = 0;
-
-    });
-
-
-    video.addEventListener('seeked', () => {
-
-      // Keep video paused after creating thumbnail
-      video.pause();
-
-    });
-
-
-    // ========================================================
-    // CLICK TO PLAY / PAUSE
-    // ========================================================
-
-    card.addEventListener('click', () => {
-
-      if (video.paused) {
-
-        video.play()
-          .then(() => {
-
-            playButton.style.opacity = '0';
-
-          })
-          .catch(error => {
-
-            console.error(
-              'Could not play video:',
-              item.video,
-              error
-            );
-
-          });
-
-      } else {
+    video.addEventListener(
+      'loadedmetadata',
+      () => {
 
         video.pause();
-
-        playButton.style.opacity = '1';
+        video.muted = true;
+        video.currentTime = 0;
 
       }
+    );
 
-    });
+
+    video.addEventListener(
+      'seeked',
+      () => {
+
+        video.pause();
+        video.muted = true;
+
+      }
+    );
 
 
     // ========================================================
-    // WHEN VIDEO ENDS
+    // SAFETY - THUMBNAIL CAN NEVER PLAY
     // ========================================================
 
-    video.addEventListener('ended', () => {
+    video.addEventListener(
+      'play',
+      () => {
 
-      playButton.style.opacity = '1';
+        video.pause();
+        video.muted = true;
+        video.currentTime = 0;
 
-      video.currentTime = 0;
+        if (playButton) {
+          playButton.style.opacity = '1';
+        }
 
-    });
+      },
+      true
+    );
 
 
     // ========================================================
     // VIDEO ERROR
     // ========================================================
 
-    video.addEventListener('error', () => {
+    video.addEventListener(
+      'error',
+      () => {
 
-      console.error(
-        '❌ Video could not load:',
-        item.video
-      );
+        console.error(
+          '❌ Video could not load:',
+          item.video
+        );
 
-    });
+      }
+    );
 
 
     // ========================================================
     // 3D TILT
     // ========================================================
 
-    card.addEventListener('mousemove', e => {
+    card.addEventListener(
+      'mousemove',
+      e => {
 
-      const rect =
-        card.getBoundingClientRect();
-
-      const cx =
-        rect.left + rect.width / 2;
-
-      const cy =
-        rect.top + rect.height / 2;
-
-      const rx =
-        ((e.clientY - cy) /
-          rect.height) * 12;
-
-      const ry =
-        -((e.clientX - cx) /
-          rect.width) * 12;
-
-      card.style.transform =
-        `perspective(800px)
-         rotateX(${rx}deg)
-         rotateY(${ry}deg)
-         translateY(-6px)`;
-
-      card.style.animationPlayState =
-        'paused';
-
-    });
+        const rect =
+          card.getBoundingClientRect();
 
 
-    card.addEventListener('mouseleave', () => {
+        const cx =
+          rect.left +
+          rect.width / 2;
 
-      card.style.transform = '';
 
-      card.style.animationPlayState =
-        'running';
+        const cy =
+          rect.top +
+          rect.height / 2;
 
-    });
+
+        const rx =
+          ((e.clientY - cy) /
+            rect.height) *
+          12;
+
+
+        const ry =
+          -((e.clientX - cx) /
+            rect.width) *
+          12;
+
+
+        card.style.transform =
+          `perspective(800px)
+           rotateX(${rx}deg)
+           rotateY(${ry}deg)
+           translateY(-6px)`;
+
+
+        card.style.animationPlayState =
+          'paused';
+
+      }
+    );
+
+
+    card.addEventListener(
+      'mouseleave',
+      () => {
+
+        card.style.transform =
+          '';
+
+        card.style.animationPlayState =
+          'running';
+
+      }
+    );
 
   });
+
+
+  // ==========================================================
+  // ONE AND ONLY PROJECT CLICK HANDLER
+  // ==========================================================
+
+  grid.addEventListener(
+    'click',
+    function (e) {
+
+      const card =
+        e.target.closest(
+          '.mi'
+        );
+
+
+      if (!card) return;
+
+
+      const video =
+        card.querySelector(
+          '.portfolio-video'
+        );
+
+
+      if (!video) return;
+
+
+      // Stop thumbnail immediately
+      video.pause();
+      video.muted = true;
+      video.currentTime = 0;
+
+
+      // Get project information
+      const videoSrc =
+        video.getAttribute(
+          'src'
+        );
+
+
+      const title =
+        card
+          .querySelector(
+            '.mi-title'
+          )
+          ?.textContent
+          .trim() ||
+        'Project';
+
+
+      const category =
+        card
+          .querySelector(
+            '.mi-cat'
+          )
+          ?.textContent
+          .trim() ||
+        '';
+
+
+      console.log(
+        '🎬 Opening project:',
+        title,
+        videoSrc
+      );
+
+
+      // Open large popup
+      openVideoModal(
+        videoSrc,
+        title,
+        category
+      );
+
+    }
+  );
 
 }
 
@@ -1128,6 +1379,7 @@ console.log(
   galleryData.length,
   'videos'
 );
+
 
 // ============================================================
 // CONTACT FORM
@@ -1361,3 +1613,4 @@ console.log(
   '🎬 Gallery videos:',
   galleryData.length
 );
+```
