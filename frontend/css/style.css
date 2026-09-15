@@ -968,3 +968,10 @@ body.modal-open {
   }
 
 }
+/* ===== FIX: APPROVED REVIEW CARDS VISIBILITY ===== */
+
+#approvedReviews .testimonial-card.rev {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0) !important;
+}
