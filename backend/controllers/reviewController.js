@@ -87,8 +87,29 @@ const rejectReview = async (req, res) => {
   }
 };
 
+const getPendingReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({
+      status: "pending"
+    }).sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      count: reviews.length,
+      data: reviews
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message
+    });
+  }
+};
+
 module.exports = {
   createReview,
+  getPendingReviews,
   approveReview,
   rejectReview
 };
