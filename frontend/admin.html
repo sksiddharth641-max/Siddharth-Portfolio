@@ -1,1 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>SID VISUALS — Review Admin</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #080b12;
+      color: #fff;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #9ca3af;
+      margin-bottom: 30px;
+    }
+
+    .review-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    .review-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+    .name {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .company {
+      color: #9ca3af;
+      margin-top: 5px;
+    }
+
+    .rating {
+      color: #facc15;
+      font-size: 20px;
+    }
+
+    .review-text {
+      color: #d1d5db;
+      line-height: 1.6;
+      margin: 15px 0;
+    }
+
+    .project {
+      color: #67e8f9;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    button {
+      border: none;
+      padding: 11px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .approve {
+      background: #10b981;
+      color: white;
+    }
+
+    .reject {
+      background: #ef4444;
+      color: white;
+    }
+
+    .empty {
+      color: #9ca3af;
+      padding: 30px 0;
+    }
+
+    .error {
+      color: #f87171;
+      padding: 20px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>SID VISUALS — Review Admin</h1>
+
+    <p class="subtitle">
+      Manage pending client reviews
+    </p>
+
+    <div id="reviews">
+      Loading reviews...
+    </div>
+
+  </div>
+
+  <script>
+
+    const API_URL =
+      "https://siddharth-portfolio-o283.onrender.com/api/reviews";
+
+    async function loadPendingReviews() {
+
+      const container =
+        document.getElementById("reviews");
+
+      try {
+
+        const response =
+          await fetch(`${API_URL}/pending`);
+
+        const result =
+          await response.json();
+
+        if (!result.success) {
+          throw new Error(result.message);
+        }
+
+        if (result.data.length === 0) {
+
+          container.innerHTML =
+            '<div class="empty">No pending reviews 🎉</div>';
+
+          return;
+        }
+
+        container.innerHTML =
+          result.data.map(review => `
+
+            <div class="review-card">
+
+              <div class="review-top">
+
+                <div>
+                  <div class="name">
+                    ${review.name}
+                  </div>
+
+                  <div class="company">
+                    ${review.company || "No company provided"}
+                  </div>
+                </div>
+
+                <div class="rating">
+                  ${"★".repeat(review.rating)}
+                </div>
+
+              </div>
+
+              <div class="project">
+                ${review.projectType}
+              </div>
+
+              <div class="review-text">
+                "${review.review}"
+              </div>
+
+              <div class="actions">
+
+                <button
+                  class="approve"
+                  onclick="updateReview('${review._id}', 'approve')">
+                  ✓ Approve
+                </button>
+
+                <button
+                  class="reject"
+                  onclick="updateReview('${review._id}', 'reject')">
+                  ✕ Reject
+                </button>
+
+              </div>
+
+            </div>
+
+          `).join("");
+
+      } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML =
+          `<div class="error">
+            Failed to load reviews.
+          </div>`;
+
+      }
+    }
+
+
+    async function updateReview(id, action) {
+
+      try {
+
+        const response =
+          await fetch(
+            `${API_URL}/${id}/${action}`,
+            {
+              method: "PUT"
+            }
+          );
+
+        const result =
+          await response.json();
+
+        if (!result.success) {
+          throw new Error(result.message);
+        }
+
+        alert(result.message);
+
+        loadPendingReviews();
+
+      } catch (error) {
+
+        console.error(error);
+
+        alert("Failed to update review.");
+
+      }
+    }
+
+
+    loadPendingReviews();
+
+  </script>
+
+</body>
+</html>
