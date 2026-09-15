@@ -638,7 +638,7 @@ footer{
   .nav-toggle{display:flex;}
   .sec,.sec-sm{padding:64px 20px;}
   .divider{margin:0 20px;}
-  .hero{padding:45px 20px 60px;}
+  .hero{padding:25px 20px 60px;}
   .hero-title{font-size:38px;letter-spacing:-1px;}
   .hero-btns{flex-direction:column;}
   .hero-stats{grid-template-columns:1fr 1fr;}
