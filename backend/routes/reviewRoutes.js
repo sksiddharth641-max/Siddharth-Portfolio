@@ -7,13 +7,11 @@ const {
   getApprovedReviews,
   approveReview,
   rejectReview
-  
-} = require("../controllers/reviewController");
 } = require("../controllers/reviewController");
 
 router.get("/pending", getPendingReviews);
 
-router.get("/pending", getPendingReviews);
+router.get("/approved", getApprovedReviews);
 
 router.post("/", createReview);
 
