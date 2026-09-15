@@ -638,7 +638,7 @@ footer{
   .nav-toggle{display:flex;}
   .sec,.sec-sm{padding:64px 20px;}
   .divider{margin:0 20px;}
-  .hero{padding:110px 20px 60px;}
+  .hero{padding:45px 20px 60px;}
   .hero-title{font-size:38px;letter-spacing:-1px;}
   .hero-btns{flex-direction:column;}
   .hero-stats{grid-template-columns:1fr 1fr;}
@@ -984,19 +984,54 @@ body.modal-open {
   }
 
   /* Keep workflow steps aligned */
+ .workflow-wrap {
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  align-items: stretch;
+}
+
+.wf-step {
+  width: 100%;
+  min-height: 200px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px 35px;
+}
+
+.wf-step::after {
+  display: none;
+}
+@media (max-width: 768px) {
+
+  /* ===== HERO MOBILE SPACING ===== */
+  .hero {
+    padding-top: 45px;
+  }
+
+  /* ===== WORKFLOW MOBILE ALIGNMENT ===== */
   .workflow-wrap {
     width: 100%;
+    display: flex;
+    flex-direction: column;
     align-items: stretch;
-    gap: 16px;
+    gap: 0;
   }
 
   .wf-step {
     width: 100%;
-    text-align: left;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px 35px;
   }
 
-  .wf-step > * {
-    max-width: 100%;
+  .wf-step::after {
+    display: none;
   }
-
 }
