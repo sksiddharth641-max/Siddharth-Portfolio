@@ -1279,7 +1279,7 @@ async function submitContact(event) {
 // ============================================================
 // REVIEW FORM
 // ============================================================
-function submitReview(event) {
+async function submitReview(event) {
 
   event.preventDefault();
 
@@ -1287,22 +1287,115 @@ function submitReview(event) {
 
   if (!btn) return;
 
+  // Get values from the review section
+  const reviewSection = document.getElementById("reviews");
+
+  const inputs = reviewSection.querySelectorAll(
+    ".rf-input"
+  );
+
+  const name = inputs[0].value.trim();
+  const company = inputs[1].value.trim();
+  const email = inputs[2].value.trim();
+
+  const projectType =
+    reviewSection.querySelector(".rf-select").value;
+
+  const ratingInput =
+    reviewSection.querySelector(
+      'input[name="rating"]:checked'
+    );
+
+  const review =
+    reviewSection.querySelector(".rf-textarea").value.trim();
+
+  // Basic validation
+  if (!name || !email || !projectType || !ratingInput || !review) {
+
+    alert("Please fill all required fields.");
+
+    return;
+  }
+
   const originalText = btn.innerHTML;
 
-  btn.innerHTML = '✓ Review Submitted!';
+  btn.disabled = true;
+  btn.innerHTML = "Submitting...";
 
-  btn.style.background =
-    'linear-gradient(135deg,#10b981,#06B6D4)';
+  try {
 
-  setTimeout(() => {
+    const response = await fetch(
+      "https://siddharth-portfolio-o283.onrender.com/api/reviews",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          name: name,
+          company: company,
+          email: email,
+          projectType: projectType,
+          rating: Number(ratingInput.value),
+          review: review
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Failed to submit review"
+      );
+    }
+
+    btn.innerHTML = "✓ Review Submitted!";
+
+    btn.style.background =
+      "linear-gradient(135deg,#10b981,#06B6D4)";
+
+    // Clear the form
+    inputs.forEach(input => {
+      input.value = "";
+    });
+
+    reviewSection.querySelector(".rf-select").value = "";
+
+    reviewSection.querySelectorAll(
+      'input[name="rating"]'
+    ).forEach(radio => {
+      radio.checked = false;
+    });
+
+    reviewSection.querySelector(".rf-textarea").value = "";
+
+    alert(
+      "Thank you! Your review has been submitted and is waiting for approval."
+    );
+
+    setTimeout(() => {
+
+      btn.innerHTML = originalText;
+      btn.style.background = "";
+      btn.disabled = false;
+
+    }, 3000);
+
+  } catch (error) {
+
+    console.error("Review submission error:", error);
+
+    alert(
+      "Unable to submit your review. Please try again."
+    );
 
     btn.innerHTML = originalText;
-    btn.style.background = '';
-
-  }, 3000);
-
+    btn.disabled = false;
+  }
 }
-
 
 // ============================================================
 // FINAL CHECK
