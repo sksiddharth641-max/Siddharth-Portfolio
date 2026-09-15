@@ -631,6 +631,12 @@ const galleryData = [
   },
   {
     cat: 'commercial',
+    title: 'Batman Edit',
+    video: 'videos/Batman.mp4.mp4',
+    h: 220
+  },
+  {
+    cat: 'commercial',
     title: 'Frams Edit',
     video: 'videos/Frams Edit.mp4 (1).mp4',
     h: 180
