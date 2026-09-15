@@ -975,3 +975,28 @@ body.modal-open {
   visibility: visible !important;
   transform: translateY(0) !important;
 }
+/* ===== MOBILE FIXES ===== */
+@media (max-width: 768px) {
+
+  /* Fix gap above Available for New Projects */
+  .hero {
+    padding-top: 80px;
+  }
+
+  /* Keep workflow steps aligned */
+  .workflow-wrap {
+    width: 100%;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .wf-step {
+    width: 100%;
+    text-align: left;
+  }
+
+  .wf-step > * {
+    max-width: 100%;
+  }
+
+}
