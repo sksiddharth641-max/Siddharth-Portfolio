@@ -623,8 +623,8 @@ footer{
 /* ========== RESPONSIVE ========== */
 @media(max-width:1024px){
   .hero-visual{display:none;}
-  .hero-content{max-width:100%;}
-  .hero-stats{grid-template-columns:repeat(2,1fr);}
+  -content{max-width:100%;}
+  -stats{grid-template-columns:repeat(2,1fr);}
   .about-grid{grid-template-columns:1fr;}
   .photo-box{aspect-ratio:16/9;}
   .proj-grid{grid-template-columns:repeat(2,1fr);}
@@ -638,7 +638,7 @@ footer{
   .nav-toggle{display:flex;}
   .sec,.sec-sm{padding:64px 20px;}
   .divider{margin:0 20px;}
-  .hero{padding:25px 20px 60px;}
+  .hero{padding:15px 20px 60px;}
   .hero-title{font-size:38px;letter-spacing:-1px;}
   .hero-btns{flex-direction:column;}
   .hero-stats{grid-template-columns:1fr 1fr;}
