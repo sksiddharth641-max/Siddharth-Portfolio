@@ -1409,3 +1409,114 @@ console.log(
   '🎬 Gallery videos:',
   galleryData.length
 );
+
+async function loadApprovedReviews() {
+
+  const container =
+    document.getElementById("approvedReviews");
+
+  if (!container) return;
+
+  try {
+
+    const response = await fetch(
+      "https://siddharth-portfolio-o283.onrender.com/api/reviews/approved"
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Failed to load reviews"
+      );
+    }
+
+    // No approved reviews
+    if (!result.data || result.data.length === 0) {
+
+      container.innerHTML = `
+        <div class="testimonials-empty">
+
+          <div class="te-icon">💬</div>
+
+          <div class="te-msg">
+            Client reviews will appear here.
+          </div>
+
+          <div class="te-sub">
+            Be the first to work with SID VISUALS and leave your review below ↓
+          </div>
+
+        </div>
+      `;
+
+      return;
+    }
+
+    // Display approved reviews
+    container.innerHTML = result.data.map(review => {
+
+      const stars =
+        "★".repeat(Number(review.rating)) +
+        "☆".repeat(5 - Number(review.rating));
+
+      return `
+        <div class="testimonial-card rev">
+
+          <div class="testimonial-stars">
+            ${stars}
+          </div>
+
+          <div class="testimonial-text">
+            "${review.review}"
+          </div>
+
+          <div class="testimonial-client">
+
+            <div class="testimonial-avatar">
+              ${review.name.charAt(0).toUpperCase()}
+            </div>
+
+            <div>
+              <div class="testimonial-name">
+                ${review.name}
+              </div>
+
+              <div class="testimonial-company">
+                ${review.company || "Client"}
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+    }).join("");
+
+  } catch (error) {
+
+    console.error(
+      "Failed to load approved reviews:",
+      error
+    );
+
+    container.innerHTML = `
+      <div class="testimonials-empty">
+
+        <div class="te-icon">⚠️</div>
+
+        <div class="te-msg">
+          Reviews are temporarily unavailable.
+        </div>
+
+      </div>
+    `;
+
+  }
+
+}
+
+
+// Load approved reviews when page loads
+loadApprovedReviews();
