@@ -1005,6 +1005,7 @@ body.modal-open {
 .wf-step::after {
   display: none;
 }
+}
 @media (max-width: 768px) {
 
   /* ===== HERO MOBILE SPACING ===== */
@@ -1249,4 +1250,117 @@ body.modal-open {
   .nav-toggle:active {
     transform: scale(0.94);
   }
+}
+/* =========================================
+   FINAL MOBILE MENU FIX
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  /* Mobile menu overlay */
+  .mobile-menu {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 99998 !important;
+
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+
+    padding: 80px 20px 40px;
+
+    background: rgba(8, 8, 16, 0.78);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+
+    overflow-y: auto;
+  }
+
+  /* Only show when JS adds .open */
+  .mobile-menu.open {
+    display: flex !important;
+  }
+
+  /* X button */
+  .mobile-close {
+    position: absolute !important;
+    top: 18px !important;
+    right: 20px !important;
+
+    width: 48px !important;
+    height: 48px !important;
+
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 100000 !important;
+
+    border: 1px solid rgba(255,255,255,.18) !important;
+    border-radius: 14px !important;
+
+    background: rgba(255,255,255,.08) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+
+    color: #fff !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+  }
+
+  /* Menu links */
+  .mobile-menu a {
+    position: relative;
+    z-index: 100000;
+
+    width: min(320px, 90%);
+    padding: 14px 20px;
+
+    text-align: center;
+
+    color: #fff !important;
+    text-decoration: none !important;
+
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 14px;
+
+    background: rgba(255,255,255,.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    cursor: pointer;
+  }
+
+  .mobile-menu a:active {
+    transform: scale(.97);
+    background: rgba(255,255,255,.12);
+  }
+
+  /* Hamburger button stays above everything */
+  .nav-toggle {
+    position: relative;
+    z-index: 100001 !important;
+
+    width: 48px !important;
+    height: 48px !important;
+
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255,255,255,.16) !important;
+    border-radius: 14px !important;
+
+    background: rgba(255,255,255,.07) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+
+    color: #fff !important;
+    font-size: 23px !important;
+    cursor: pointer !important;
+  }
+
 }
